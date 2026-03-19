@@ -1,0 +1,1510 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Humand Partner Tool</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --c-navy:#1E3A8A;--c-navy-mid:#2E4BC6;--c-navy-soft:#3B55C4;
+  --c-sky-50:#F0F5FF;--c-sky-100:#E8EFFE;--c-sky-200:#C7D9FF;
+  --c-slate-400:#94A3B8;--c-slate-500:#64748B;--c-slate-600:#475569;
+  --c-slate-700:#334155;--c-slate-800:#1E293B;
+  --c-warm-50:#F8FAFC;--c-warm-100:#F1F5F9;--c-warm-200:#E2E8F0;
+  --c-border:#E2E8F0;--c-card:#FFFFFF;--c-text:#1E293B;--c-muted:#64748B;
+  --c-green:#15803D;--c-green-bg:#F0FDF4;--c-green-bd:#86EFAC;
+  --c-purple:#5B21B6;--c-purple-bg:#F5F3FF;--c-purple-bd:#DDD6FE;
+  --radius:12px;--radius-sm:8px;--space-xs:6px;--space-sm:12px;--space-md:24px;--space-lg:32px;
+  --shadow-sm:0 1px 3px rgba(0,0,0,0.06),0 1px 2px rgba(0,0,0,0.04);
+  --shadow-md:0 4px 12px rgba(0,0,0,0.08);--shadow-lg:0 8px 24px rgba(0,0,0,0.1);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Inter',sans-serif;background:var(--c-warm-50);color:var(--c-text);min-height:100vh;font-size:14px;-webkit-font-smoothing:antialiased;}
+
+/* LOGIN */
+#login-screen{position:fixed;inset:0;z-index:2000;display:flex;align-items:center;justify-content:center;padding:20px;background:linear-gradient(135deg,#2a43a8 0%,#3050be 40%,#3a60cc 70%,#263f9e 100%);}
+#login-screen::before{content:'';position:absolute;inset:0;background-image:radial-gradient(circle,rgba(255,255,255,0.04) 1px,transparent 1px);background-size:28px 28px;}
+.login-blob{position:absolute;border-radius:50%;filter:blur(80px);pointer-events:none;}
+.login-blob-1{top:-60px;left:15%;width:500px;height:380px;background:radial-gradient(ellipse,rgba(140,160,255,0.2) 0%,transparent 70%);}
+.login-blob-2{bottom:-80px;right:-50px;width:420px;height:340px;background:radial-gradient(ellipse,rgba(60,90,200,0.18) 0%,transparent 70%);}
+.login-box{background:#fff;border-radius:20px;padding:40px 36px;max-width:400px;width:100%;box-shadow:0 32px 80px rgba(0,0,0,0.28);position:relative;z-index:1;}
+@media(max-width:480px){.login-box{padding:28px 20px;}}
+.login-logo{font-size:20px;font-weight:300;letter-spacing:8px;color:var(--c-navy);margin-bottom:2px;}
+.login-tagline{font-size:10px;color:var(--c-muted);margin-bottom:28px;letter-spacing:2px;text-transform:uppercase;font-weight:500;}
+.login-title{font-size:20px;font-weight:800;color:var(--c-text);margin-bottom:24px;}
+.login-step{transition:opacity .3s ease,transform .3s ease;}
+.login-step.hidden{opacity:0;transform:translateY(8px);pointer-events:none;position:absolute;top:0;left:0;right:0;}
+.login-step.visible{opacity:1;transform:translateY(0);}
+.lpt-wrap{margin-bottom:20px;}
+.lpt-label{font-size:11px;font-weight:600;color:var(--c-muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;}
+.lpt-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.lpt-option{border:1.5px solid var(--c-border);border-radius:10px;padding:12px;cursor:pointer;transition:border-color .2s,background .2s;text-align:center;background:var(--c-warm-50);}
+.lpt-option:hover{border-color:var(--c-sky-200);}
+.lpt-option.selected{border-color:var(--c-navy);background:var(--c-sky-50);}
+.lpt-icon{font-size:20px;margin-bottom:3px;}
+.lpt-title{font-size:12px;font-weight:700;color:var(--c-text);}
+.lpt-option.selected .lpt-title{color:var(--c-navy);}
+.lpt-sub{font-size:10px;color:var(--c-muted);margin-top:2px;font-weight:500;}
+.login-field{margin-bottom:14px;}
+.login-field label{display:block;font-size:11px;font-weight:600;color:var(--c-muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:1px;}
+.login-field input{width:100%;height:48px;border:1.5px solid var(--c-border);border-radius:10px;font-size:14px;font-family:'Inter',sans-serif;padding:0 14px;background:var(--c-warm-50);color:var(--c-text);outline:none;transition:border-color .25s,box-shadow .25s;}
+.login-field input:focus{border-color:var(--c-navy);background:#fff;box-shadow:0 0 0 3px rgba(30,58,138,0.08);}
+.login-field input.error{border-color:#DC2626;}
+.login-field-error{font-size:11px;color:#DC2626;margin-top:4px;display:none;}
+.login-field-error.show{display:block;}
+.login-pwd-wrap{position:relative;}
+.login-pwd-wrap input{padding-right:44px;}
+.login-pwd-toggle{position:absolute;right:14px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--c-muted);font-size:15px;padding:0;line-height:1;}
+.login-btn{width:100%;height:48px;background:linear-gradient(135deg,#1E3A8A,#2E4BC6);color:white;border:none;border-radius:10px;font-size:14px;font-weight:700;font-family:'Inter',sans-serif;cursor:pointer;transition:box-shadow .25s,transform .2s;display:flex;align-items:center;justify-content:center;gap:8px;}
+.login-btn:hover{box-shadow:0 4px 20px rgba(30,58,138,0.3);transform:translateY(-1px);}
+.login-trust{display:flex;justify-content:center;gap:18px;margin-top:18px;flex-wrap:wrap;}
+.login-trust-item{font-size:11px;color:var(--c-muted);display:flex;align-items:center;gap:4px;font-weight:500;}
+.login-trust-val{font-weight:700;color:var(--c-navy);}
+.login-org-banner{background:var(--c-sky-50);border:1px solid var(--c-sky-200);border-radius:12px;padding:11px 14px;display:flex;align-items:center;gap:10px;margin-bottom:20px;}
+.login-org-avatar{width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,var(--c-navy),var(--c-navy-soft));display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:white;flex-shrink:0;}
+.login-org-name{font-size:13px;font-weight:700;color:var(--c-navy);}
+.login-org-type{font-size:10px;color:var(--c-navy-soft);font-weight:500;margin-top:1px;opacity:0.7;}
+.login-back-btn{background:none;border:none;color:var(--c-muted);font-size:11px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;display:flex;align-items:center;gap:4px;padding:0;margin-bottom:18px;transition:color .2s;}
+.login-back-btn:hover{color:var(--c-navy);}
+
+/* HEADER */
+.header{background:var(--c-card);border-bottom:1px solid var(--c-border);padding:0 20px;height:56px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;gap:8px;}
+.header-left{display:flex;align-items:center;gap:10px;flex:1;min-width:0;}
+.logo{font-size:16px;font-weight:300;letter-spacing:5px;color:var(--c-navy);flex-shrink:0;}
+.header-sep{width:1px;height:16px;background:var(--c-border);flex-shrink:0;}
+.community-chip{display:flex;align-items:center;gap:6px;background:var(--c-warm-100);border-radius:20px;padding:3px 10px 3px 4px;min-width:0;max-width:180px;}
+.community-chip-avatar{width:22px;height:22px;border-radius:50%;background:linear-gradient(135deg,var(--c-navy),var(--c-navy-soft));display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:800;color:white;flex-shrink:0;}
+.community-chip-name{font-size:12px;font-weight:600;color:var(--c-text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.community-chip-badge{font-size:9px;font-weight:700;padding:2px 7px;border-radius:10px;flex-shrink:0;}
+.badge-silver{background:#F1F5F9;color:#475569;border:1px solid #CBD5E1;}
+.badge-gold{background:#FFFBEB;color:#92400E;border:1px solid #FCD34D;}
+.badge-platinum{background:var(--c-purple-bg);color:var(--c-purple);border:1px solid var(--c-purple-bd);}
+.header-right{display:flex;align-items:center;gap:8px;flex-shrink:0;}
+.ycomb{display:flex;align-items:center;gap:4px;font-size:10px;color:var(--c-muted);background:var(--c-warm-100);border-radius:20px;padding:3px 8px 3px 4px;font-weight:500;}
+.ycomb-y{background:#F26522;color:white;font-weight:800;font-size:9px;width:15px;height:15px;border-radius:3px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+@media(max-width:600px){.ycomb{display:none;}}
+.lang-selector{display:flex;gap:2px;background:var(--c-warm-100);border-radius:20px;padding:3px;}
+.lang-btn{font-size:10px;font-weight:700;padding:2px 7px;border-radius:16px;border:none;background:transparent;cursor:pointer;color:var(--c-muted);font-family:'Inter',sans-serif;transition:background .2s,color .2s;}
+.lang-btn.active{background:var(--c-card);color:var(--c-navy);box-shadow:var(--shadow-sm);}
+@media(max-width:360px){.lang-selector{display:none;}}
+.notif-wrap{position:relative;}
+.notif-bell-btn{background:transparent;border:none;cursor:pointer;width:34px;height:34px;border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;font-size:16px;transition:background .2s;position:relative;}
+.notif-bell-btn:hover{background:var(--c-warm-100);}
+.notif-badge{position:absolute;top:4px;right:4px;width:8px;height:8px;border-radius:50%;background:#EF4444;border:2px solid var(--c-card);display:none;}
+.notif-badge.show{display:block;}
+.notif-dropdown{position:absolute;top:calc(100% + 8px);right:0;width:300px;background:var(--c-card);border:1px solid var(--c-border);border-radius:var(--radius);box-shadow:var(--shadow-lg);z-index:300;display:none;overflow:hidden;}
+.notif-dropdown.open{display:block;animation:fadeUp .2s ease;}
+.notif-hdr{padding:12px 16px 10px;border-bottom:1px solid var(--c-border);display:flex;align-items:center;justify-content:space-between;}
+.notif-hdr-title{font-size:12px;font-weight:700;color:var(--c-text);}
+.notif-mark-read{font-size:10px;font-weight:600;color:var(--c-navy);cursor:pointer;background:none;border:none;font-family:'Inter',sans-serif;}
+.notif-list{max-height:280px;overflow-y:auto;}
+.notif-item{display:flex;gap:10px;padding:11px 16px;border-bottom:1px solid var(--c-border);transition:background .15s;cursor:default;}
+.notif-item:last-child{border-bottom:none;}
+.notif-item.unread{background:#F8FAFF;}
+.notif-item:hover{background:var(--c-warm-50);}
+.notif-icon-wrap{width:32px;height:32px;border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;}
+.notif-icon-wrap.green{background:var(--c-green-bg);}
+.notif-icon-wrap.blue{background:var(--c-sky-50);}
+.notif-icon-wrap.amber{background:#FFFBEB;}
+.notif-icon-wrap.purple{background:var(--c-purple-bg);}
+.notif-content{flex:1;min-width:0;}
+.notif-text{font-size:11px;font-weight:500;color:var(--c-text);line-height:1.5;}
+.notif-text strong{font-weight:700;}
+.notif-time{font-size:10px;color:var(--c-muted);margin-top:2px;}
+.notif-dot{width:6px;height:6px;border-radius:50%;background:var(--c-navy);flex-shrink:0;margin-top:4px;}
+.user-menu-wrap{position:relative;}
+.user-avatar-btn{display:flex;align-items:center;gap:4px;background:transparent;border:none;cursor:pointer;padding:3px 6px 3px 3px;border-radius:20px;transition:background .2s;font-family:'Inter',sans-serif;}
+.user-avatar-btn:hover{background:var(--c-warm-100);}
+.u-avatar{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,var(--c-navy),var(--c-navy-soft));display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;color:white;flex-shrink:0;}
+.u-chevron{font-size:9px;color:var(--c-muted);}
+.user-dropdown{position:absolute;top:calc(100% + 8px);right:0;background:var(--c-card);border:1px solid var(--c-border);border-radius:var(--radius);box-shadow:var(--shadow-lg);min-width:210px;padding:6px;z-index:200;display:none;}
+.user-dropdown.open{display:block;animation:fadeUp .2s ease;}
+.dd-profile{padding:10px;border-bottom:1px solid var(--c-border);margin-bottom:5px;}
+.dd-community{font-size:13px;font-weight:700;color:var(--c-text);}
+.dd-meta{font-size:11px;color:var(--c-muted);margin-top:1px;font-weight:500;}
+.dd-status-row{display:flex;align-items:center;gap:5px;margin-top:6px;}
+.dd-status-dot{width:6px;height:6px;border-radius:50%;}
+.dd-status-label{font-size:11px;font-weight:600;}
+.dd-item{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:var(--radius-sm);font-size:12px;font-weight:500;color:var(--c-text);cursor:pointer;transition:background .15s;border:none;background:transparent;width:100%;font-family:'Inter',sans-serif;text-align:left;}
+.dd-item:hover{background:var(--c-warm-50);}
+.dd-item.danger{color:#DC2626;}
+.dd-item.danger:hover{background:#FEF2F2;}
+.dd-separator{height:1px;background:var(--c-border);margin:4px 0;}
+.contract-banner{border-bottom:1px solid;padding:8px 20px;display:flex;align-items:center;gap:10px;font-size:12px;font-weight:500;}
+.contract-banner.pending{background:#FFFBEB;border-color:#FCD34D;color:#92400E;}
+.contract-banner.signed{background:var(--c-green-bg);border-color:var(--c-green-bd);color:var(--c-green);}
+.contract-banner-pandadoc{font-size:11px;font-weight:600;margin-left:auto;cursor:pointer;opacity:0.8;text-decoration:underline;white-space:nowrap;}
+
+/* HERO */
+.hero{background:linear-gradient(135deg,#2a43a8 0%,#3050be 40%,#3a60cc 70%,#263f9e 100%);padding:32px 24px 28px;text-align:center;position:relative;overflow:hidden;}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.03) 1px,transparent 1px);background-size:48px 48px;}
+.hero-blob{position:absolute;top:-80px;left:40%;transform:translateX(-50%);width:480px;height:320px;border-radius:50%;background:radial-gradient(ellipse,rgba(120,160,255,0.22) 0%,transparent 70%);filter:blur(50px);}
+.hero-inner{position:relative;z-index:1;}
+.hero-eyebrow{display:inline-flex;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:2px;color:rgba(255,255,255,0.45);margin-bottom:10px;border:1px solid rgba(255,255,255,0.12);padding:4px 12px;border-radius:20px;}
+.hero h1{font-size:26px;font-weight:900;color:#F8FAFC;letter-spacing:-0.8px;line-height:1.2;}
+@media(max-width:500px){.hero h1{font-size:20px;}}
+.hero-welcome{font-size:12px;color:rgba(255,255,255,0.4);margin-top:8px;font-weight:500;}
+.hero-welcome strong{color:rgba(255,255,255,0.75);font-weight:700;}
+.trust-bar{background:var(--c-card);border-bottom:1px solid var(--c-border);padding:10px 24px;display:flex;justify-content:center;gap:20px;flex-wrap:wrap;}
+.trust-item{display:flex;align-items:center;gap:4px;font-size:11px;color:var(--c-muted);font-weight:500;}
+.trust-val{font-weight:800;color:var(--c-navy-soft);font-size:12px;}
+.nav-tabs{background:var(--c-card);border-bottom:1px solid var(--c-border);padding:0 24px;display:flex;overflow-x:auto;-webkit-overflow-scrolling:touch;}
+.nav-tab{display:flex;align-items:center;gap:6px;padding:14px 18px;font-size:12px;font-weight:600;color:var(--c-muted);border:none;background:transparent;cursor:pointer;font-family:'Inter',sans-serif;border-bottom:2px solid transparent;white-space:nowrap;transition:color .2s,border-color .2s;}
+.nav-tab:hover{color:var(--c-text);}
+.nav-tab.active{color:var(--c-navy);border-bottom-color:var(--c-navy);}
+.nav-tab-dot{width:6px;height:6px;border-radius:50%;background:var(--c-green);flex-shrink:0;}
+
+/* LAYOUT */
+.page-layout{display:grid;grid-template-columns:1fr 260px;max-width:1080px;margin:0 auto;padding:var(--space-md) var(--space-md) 80px;align-items:start;gap:0;}
+@media(max-width:860px){.page-layout{grid-template-columns:1fr;padding:var(--space-sm) var(--space-sm) 80px;}.sidebar{display:none;}}
+.main-content{padding-right:var(--space-md);min-width:0;}
+@media(max-width:860px){.main-content{padding-right:0;}}
+.sidebar{position:sticky;top:64px;display:flex;flex-direction:column;gap:var(--space-sm);}
+.sidebar-card{background:var(--c-card);border-radius:var(--radius);border:1px solid var(--c-border);padding:16px;box-shadow:var(--shadow-sm);}
+.sidebar-label{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:var(--c-muted);margin-bottom:14px;}
+.step-list{display:flex;flex-direction:column;}
+.step-item{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid var(--c-border);transition:color .3s;}
+.step-item:last-child{border-bottom:none;padding-bottom:0;}
+.step-item:first-child{padding-top:0;}
+.step-num-s{width:20px;height:20px;border-radius:50%;background:var(--c-warm-100);color:var(--c-muted);font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;transition:background .3s,color .3s,box-shadow .3s;}
+.step-item.active .step-num-s{background:var(--c-navy);color:white;box-shadow:0 0 0 3px rgba(30,58,138,0.12);}
+.step-item.done .step-num-s{background:var(--c-green);color:white;}
+.step-text{font-size:11px;color:var(--c-muted);font-weight:500;padding-top:2px;}
+.step-item.active .step-text{color:var(--c-navy);font-weight:700;}
+.step-item.done .step-text{color:var(--c-green);font-weight:600;}
+.profile-sidebar-card{background:linear-gradient(135deg,#1e3d96,#2a4fb0 70%,#3a62c8);border-radius:var(--radius);padding:16px;box-shadow:var(--shadow-md);}
+.psb-community{font-size:13px;font-weight:800;color:white;margin-bottom:2px;}
+.psb-type{font-size:10px;color:rgba(255,255,255,0.5);margin-bottom:12px;font-weight:500;}
+.psb-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;}
+.psb-key{font-size:9px;color:rgba(255,255,255,0.4);font-weight:600;text-transform:uppercase;letter-spacing:0.5px;}
+.psb-val{font-size:10px;color:rgba(255,255,255,0.8);font-weight:600;}
+.psb-val-link{cursor:pointer;text-decoration:underline;}
+.psb-badge{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px;margin-top:10px;}
+.psb-badge.silver{background:rgba(255,255,255,0.1);color:#CBD5E1;border:1px solid rgba(255,255,255,0.12);}
+.psb-badge.gold{background:rgba(251,191,36,0.12);color:#FCD34D;border:1px solid rgba(251,191,36,0.18);}
+.psb-badge.platinum{background:rgba(167,139,250,0.12);color:#C4B5FD;border:1px solid rgba(167,139,250,0.18);}
+.sb-pipeline-row{display:flex;align-items:center;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--c-border);}
+.sb-pipeline-row:last-child{border-bottom:none;}
+.sb-pipeline-label{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--c-text);font-weight:500;}
+.sb-pipeline-count{font-size:10px;font-weight:700;background:var(--c-sky-50);color:var(--c-navy);padding:1px 7px;border-radius:20px;}
+.tab-panel{display:none;}
+.tab-panel.active{display:block;animation:fadeUp .25s ease;}
+.section-divider{display:flex;align-items:center;gap:12px;margin:var(--space-md) 0 var(--space-sm);}
+.section-divider-line{flex:1;height:1px;background:var(--c-border);}
+.section-divider-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:var(--c-navy-soft);background:var(--c-sky-50);padding:5px 14px;border-radius:20px;white-space:nowrap;border:1px solid var(--c-sky-200);}
+.card{background:var(--c-card);border-radius:var(--radius);border:1px solid var(--c-border);padding:var(--space-md);margin-bottom:var(--space-sm);box-shadow:var(--shadow-sm);}
+.section-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--c-navy);margin-bottom:14px;}
+.field{display:flex;flex-direction:column;gap:5px;}
+.field label{font-size:11px;font-weight:600;color:var(--c-muted);}
+.field select,.field input[type=number],.field input[type=text]{height:42px;border:1.5px solid var(--c-border);border-radius:var(--radius-sm);font-size:13px;font-family:'Inter',sans-serif;padding:0 12px;background:var(--c-warm-50);color:var(--c-text);outline:none;transition:border-color .2s,box-shadow .2s;-webkit-appearance:none;appearance:none;font-weight:500;}
+.field select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='7' viewBox='0 0 12 7'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%231E3A8A' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:32px;}
+.field select:focus,.field input:focus{border-color:var(--c-navy);background:var(--c-card);box-shadow:0 0 0 3px rgba(30,58,138,0.07);}
+.field-error{font-size:11px;color:#DC2626;margin-top:4px;display:none;font-weight:500;}
+.field-error.show{display:block;}
+.field select.error,.field input.error{border-color:#DC2626;}
+.btn{height:42px;border:none;border-radius:var(--radius-sm);font-size:13px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;transition:box-shadow .2s,transform .2s;white-space:nowrap;padding:0 18px;display:inline-flex;align-items:center;gap:6px;}
+.btn:active{transform:scale(0.97);}
+.btn-primary{background:linear-gradient(135deg,var(--c-navy),var(--c-navy-soft));color:white;box-shadow:0 2px 8px rgba(30,58,138,0.18);}
+.btn-primary:hover{box-shadow:0 4px 14px rgba(30,58,138,0.28);transform:translateY(-1px);}
+.btn-secondary{background:var(--c-sky-50);color:var(--c-navy);border:1.5px solid var(--c-navy);}
+.btn-secondary:hover{background:var(--c-sky-100);}
+.btn-ghost{background:transparent;color:var(--c-muted);border:1px solid var(--c-border);}
+.btn-ghost:hover{background:var(--c-warm-100);color:var(--c-text);}
+.btn-sm{height:30px;font-size:11px;padding:0 12px;border-radius:var(--radius-sm);}
+
+/* ACCORDIONS */
+.model-accordion{border-radius:var(--radius);overflow:hidden;border:2px solid transparent;transition:border-color .25s,box-shadow .25s;cursor:pointer;margin-bottom:var(--space-sm);}
+.model-accordion.selected{border-color:var(--c-sky-200);box-shadow:var(--shadow-md);}
+.acc-header{background:linear-gradient(135deg,#3B4FC8,#1E3A8A);padding:14px 18px;display:flex;align-items:center;justify-content:space-between;user-select:none;transition:filter .2s;}
+.acc-header:hover{filter:brightness(1.06);}
+.model-accordion.selected .acc-header{background:linear-gradient(135deg,#2E4BC6,#0f1f6e);}
+.acc-title{font-size:13px;font-weight:700;color:white;}
+.acc-subtitle{font-size:11px;color:rgba(255,255,255,0.5);margin-top:2px;font-weight:500;}
+.acc-right{display:flex;align-items:center;gap:8px;}
+.acc-commission{font-size:10px;font-weight:600;color:rgba(255,255,255,0.8);background:rgba(255,255,255,0.1);padding:3px 10px;border-radius:20px;border:1px solid rgba(255,255,255,0.12);}
+.acc-selected-badge{font-size:9px;font-weight:700;background:#93C5FD;color:var(--c-navy);padding:2px 8px;border-radius:20px;}
+.acc-chevron{color:rgba(255,255,255,0.55);font-size:13px;transition:transform .3s ease;}
+.acc-chevron.open{transform:rotate(180deg);}
+.acc-body{background:linear-gradient(180deg,#162d80,#0f1f5a);display:grid;grid-template-rows:0fr;transition:grid-template-rows .3s ease;overflow:hidden;}
+.acc-body.open{grid-template-rows:1fr;}
+.acc-body-inner{overflow:hidden;padding:0 18px;min-height:0;}
+.acc-body.open .acc-body-inner{padding:16px 18px;}
+.model-list{list-style:none;}
+.model-list li{color:rgba(255,255,255,0.75);border-bottom:1px solid rgba(255,255,255,0.07);font-size:12px;padding:6px 0;display:flex;align-items:center;gap:8px;font-weight:500;}
+.model-list li:last-child{border-bottom:none;}
+.check{color:#60A5FA;font-weight:700;}
+.acc-commission-box{background:rgba(255,255,255,0.07);border-radius:var(--radius-sm);padding:10px 14px;margin-top:12px;border:1px solid rgba(255,255,255,0.09);}
+.acc-commission-box .hl-label{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:rgba(255,255,255,0.4);margin-bottom:3px;}
+.acc-commission-box .hl-val{font-size:15px;font-weight:800;color:white;}
+
+/* ORACLE */
+.oracle-shell{position:relative;overflow:hidden;border-radius:var(--radius);margin-bottom:var(--space-sm);background:linear-gradient(145deg,#2d235a,#352970 40%,#3a2d7a);border:1px solid rgba(139,92,246,0.25);box-shadow:0 4px 20px rgba(109,40,217,0.12);}
+.oracle-shell::before{content:'';position:absolute;inset:0;pointer-events:none;z-index:0;background-image:radial-gradient(1px 1px at 12% 18%,rgba(255,255,255,0.6) 0%,transparent 100%),radial-gradient(1px 1px at 35% 72%,rgba(255,255,255,0.4) 0%,transparent 100%),radial-gradient(1.5px 1.5px at 55% 35%,rgba(196,181,253,0.8) 0%,transparent 100%),radial-gradient(1px 1px at 74% 22%,rgba(196,181,253,0.7) 0%,transparent 100%),radial-gradient(1.5px 1.5px at 88% 58%,rgba(255,255,255,0.6) 0%,transparent 100%);animation:twinkle 4s ease-in-out infinite alternate;}
+@keyframes twinkle{0%{opacity:.4}100%{opacity:1}}
+.oracle-shell::after{content:'';position:absolute;top:-60px;right:-60px;width:240px;height:240px;border-radius:50%;background:radial-gradient(ellipse,rgba(139,92,246,0.15) 0%,transparent 70%);filter:blur(30px);pointer-events:none;z-index:0;animation:nebula 6s ease-in-out infinite alternate;}
+@keyframes nebula{0%{transform:scale(1)}100%{transform:scale(1.12) translate(-8px,8px)}}
+.oracle-header{padding:12px 16px 10px;display:flex;align-items:center;gap:8px;position:relative;z-index:1;border-bottom:1px solid rgba(139,92,246,0.15);}
+.oracle-crystal{font-size:20px;filter:drop-shadow(0 0 6px rgba(167,139,250,0.8));animation:floatCrystal 3s ease-in-out infinite;flex-shrink:0;}
+@keyframes floatCrystal{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-4px) rotate(2deg)}}
+.oracle-title-text{font-size:12px;font-weight:800;color:#EDE9FE;}
+.oracle-subtitle-txt{font-size:10px;color:rgba(196,181,253,0.45);font-weight:500;margin-left:4px;}
+.oracle-calc{padding:10px 16px 12px;position:relative;z-index:1;}
+.oracle-toolbar{display:flex;gap:6px;align-items:center;}
+.oracle-toolbar .field{flex:1;min-width:0;}
+.oracle-toolbar .field select,.oracle-toolbar .field input{background:rgba(255,255,255,0.08);border:1px solid rgba(139,92,246,0.28);color:#EDE9FE;font-size:11px;border-radius:var(--radius-sm);height:34px;padding:0 10px;font-family:'Inter',sans-serif;font-weight:500;transition:border-color .2s;width:100%;-webkit-appearance:none;appearance:none;}
+.oracle-toolbar .field select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23C4B5FD' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 8px center;padding-right:24px;}
+.oracle-toolbar .field select:focus,.oracle-toolbar .field input:focus{border-color:rgba(139,92,246,0.6);background:rgba(255,255,255,0.12);outline:none;}
+.oracle-toolbar .field select option{background:#2a1e5a;color:#EDE9FE;}
+.oracle-toolbar .field input::placeholder{color:rgba(196,181,253,0.35);}
+.oracle-calc-btn{height:34px;background:linear-gradient(135deg,#7c3aed,#9333ea);color:white;border:none;border-radius:var(--radius-sm);font-size:11px;font-weight:700;font-family:'Inter',sans-serif;cursor:pointer;padding:0 14px;white-space:nowrap;flex-shrink:0;transition:background .2s,box-shadow .2s;}
+.oracle-calc-btn:hover{background:linear-gradient(135deg,#6d28d9,#7e22ce);box-shadow:0 3px 12px rgba(109,40,217,0.4);}
+.oracle-clear-btn{height:34px;width:30px;padding:0;font-size:12px;background:rgba(255,255,255,0.06);color:rgba(196,181,253,0.5);border:1px solid rgba(139,92,246,0.18);border-radius:var(--radius-sm);cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .2s;font-family:'Inter',sans-serif;}
+.oracle-clear-btn:hover{background:rgba(220,38,38,0.15);color:#FCA5A5;}
+.oracle-field-error{color:#FCA5A5;font-size:10px;margin-top:3px;display:none;}
+.oracle-field-error.show{display:block;}
+.oracle-results{padding:0 16px;position:relative;z-index:1;display:none;}
+.oracle-results.show{display:block;animation:fadeUp .3s ease;}
+.oracle-divider{height:1px;background:rgba(139,92,246,0.15);margin:0 16px;position:relative;z-index:1;}
+.oracle-commission-hero{background:rgba(0,0,0,0.2);border:1px solid rgba(139,92,246,0.18);border-radius:10px;padding:12px 14px;margin-bottom:10px;}
+.oracle-commission-hero .ch-years{background:rgba(139,92,246,0.12);border-radius:8px;overflow:hidden;display:grid;grid-template-columns:1fr 1fr;gap:1px;}
+.oracle-commission-hero .ch-year-single{grid-template-columns:1fr;}
+.oracle-commission-hero .ch-year{background:rgba(0,0,0,0.15);padding:10px 14px;}
+.oracle-commission-hero .ch-year-label{font-size:8px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:rgba(255,255,255,0.3);margin-bottom:3px;}
+.oracle-commission-hero .ch-year-badge{font-size:9px;font-weight:700;background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.5);border:1px solid rgba(255,255,255,0.1);padding:1px 7px;border-radius:20px;display:inline-block;margin-bottom:3px;}
+.oracle-commission-hero .ch-year-amount{font-size:20px;font-weight:900;color:white;letter-spacing:-0.5px;line-height:1;}
+.oracle-commission-hero .ch-year-amount.dim{font-size:17px;color:rgba(255,255,255,0.5);}
+.oracle-commission-hero .ch-year-monthly{font-size:10px;color:rgba(255,255,255,0.3);margin-top:2px;}
+.oracle-commission-hero .ch-top{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px;margin-bottom:10px;}
+.oracle-commission-hero .ch-model-tag{background:rgba(255,255,255,0.1);color:rgba(255,255,255,0.8);font-size:9px;font-weight:600;padding:2px 9px;border-radius:20px;border:1px solid rgba(255,255,255,0.12);}
+.oracle-commission-hero .ch-sub{font-size:10px;color:rgba(255,255,255,0.4);font-weight:500;}
+.oracle-metrics-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;margin-bottom:10px;}
+@media(max-width:540px){.oracle-metrics-grid{grid-template-columns:1fr 1fr;}}
+.oracle-metric{background:rgba(255,255,255,0.05);border:1px solid rgba(139,92,246,0.12);border-radius:var(--radius-sm);padding:9px 10px;}
+.oracle-metric .m-label{color:rgba(196,181,253,0.45);font-size:8px;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;}
+.oracle-metric .m-val{color:#EDE9FE;font-size:14px;font-weight:800;line-height:1;}
+.oracle-metric .m-val.accent{color:#C4B5FD;}
+.oracle-metric .m-sub{color:rgba(196,181,253,0.35);font-size:9px;margin-top:2px;}
+.oracle-two-col{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;}
+@media(max-width:560px){.oracle-two-col{grid-template-columns:1fr;}}
+.oracle-inner-card{background:rgba(255,255,255,0.04);border:1px solid rgba(139,92,246,0.12);border-radius:10px;padding:12px;}
+.oracle-inner-card .section-label{color:rgba(196,181,253,0.65);font-size:9px;margin-bottom:8px;}
+.oracle-inner-card .benefit-item .btext{color:rgba(255,255,255,0.7);font-size:11px;}
+.oracle-inner-card .benefit-item .bchev{color:#C4B5FD;}
+.oracle-module-pill{display:inline-block;background:rgba(139,92,246,0.12);color:#C4B5FD;font-size:9px;font-weight:600;padding:2px 7px;border-radius:20px;margin:2px 2px 0 0;border:1px solid rgba(139,92,246,0.2);}
+.oracle-case-inner{background:rgba(0,0,0,0.18);border-radius:9px;padding:10px 12px;border:1px solid rgba(139,92,246,0.12);}
+.oracle-case-company{font-size:11px;font-weight:700;color:#C4B5FD;}
+.oracle-case-ind{font-size:9px;color:rgba(196,181,253,0.4);}
+.oracle-case-quote{font-size:11px;color:rgba(255,255,255,0.6);line-height:1.55;border-left:2px solid rgba(139,92,246,0.4);padding-left:9px;margin-bottom:8px;font-style:italic;}
+.oracle-case-metric .cv{font-size:13px;font-weight:800;color:#C4B5FD;}
+.oracle-case-metric .cl{font-size:9px;color:rgba(196,181,253,0.4);}
+.oracle-summary-toggle{display:flex;align-items:center;justify-content:space-between;cursor:pointer;}
+.oracle-summary-title{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:rgba(196,181,253,0.65);}
+.oracle-summary-box{background:rgba(0,0,0,0.22);border-radius:var(--radius-sm);padding:10px;font-size:11px;line-height:1.75;color:rgba(255,255,255,0.65);white-space:pre-wrap;font-family:'Inter',sans-serif;border:1px solid rgba(139,92,246,0.12);margin-top:8px;}
+.oracle-summary-actions{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap;}
+.oracle-btn-sec{height:26px;padding:0 10px;font-size:10px;font-weight:600;font-family:'Inter',sans-serif;border-radius:7px;cursor:pointer;border:1px solid rgba(139,92,246,0.25);background:rgba(139,92,246,0.1);color:#C4B5FD;display:inline-flex;align-items:center;gap:4px;transition:background .2s;}
+.oracle-btn-sec:hover{background:rgba(139,92,246,0.22);}
+.oracle-btn-wa{background:rgba(74,222,128,0.08);color:#4ADE80;border-color:rgba(74,222,128,0.2);}
+.oracle-portfolio-sep{padding:0 16px;position:relative;z-index:1;}
+.oracle-portfolio-toggle{display:flex;align-items:center;justify-content:space-between;cursor:pointer;padding:9px 10px;user-select:none;background:rgba(139,92,246,0.12);border-radius:var(--radius-sm);border:1px solid rgba(139,92,246,0.25);transition:background .2s;}
+.oracle-portfolio-toggle:hover{background:rgba(139,92,246,0.2);}
+.oracle-portfolio-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:rgba(196,181,253,0.75);display:flex;align-items:center;gap:5px;}
+.oracle-portfolio-chevron{color:rgba(196,181,253,0.6);font-size:11px;transition:transform .3s;background:rgba(139,92,246,0.2);width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;}
+.oracle-portfolio-chevron.open{transform:rotate(180deg);}
+.oracle-portfolio-body{padding:0 16px;position:relative;z-index:1;display:grid;grid-template-rows:0fr;transition:grid-template-rows .3s ease;overflow:hidden;}
+.oracle-portfolio-body.open{grid-template-rows:1fr;}
+.oracle-portfolio-inner{min-height:0;}
+.oracle-portfolio-body.open .oracle-portfolio-inner{padding-bottom:12px;}
+.portfolio-row{display:flex;align-items:center;gap:6px;padding:5px 8px;margin-bottom:4px;border-radius:7px;background:rgba(255,255,255,0.04);border:1px solid rgba(139,92,246,0.12);}
+.portfolio-row .field{flex:1;min-width:80px;}
+.portfolio-row .field label{display:none;}
+.portfolio-row .field select,.portfolio-row .field input{background:transparent;border:none;color:#EDE9FE;height:26px;font-size:11px;padding:0 4px;font-family:'Inter',sans-serif;font-weight:500;width:100%;-webkit-appearance:none;appearance:none;outline:none;}
+.portfolio-row .field select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='5' viewBox='0 0 8 5'%3E%3Cpath d='M1 1l3 3 3-3' stroke='%23C4B5FD' stroke-width='1.2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 4px center;padding-right:18px;}
+.portfolio-row .field select option{background:#2a1e5a;color:#EDE9FE;}
+.or-val-label{font-size:8px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:rgba(196,181,253,0.35);}
+.or-val-num{font-size:11px;font-weight:800;color:#C4B5FD;}
+.or-val-y2{color:rgba(196,181,253,0.45);font-size:10px;}
+.oracle-add-row{display:flex;align-items:center;justify-content:center;gap:5px;padding:6px;border:1px dashed rgba(139,92,246,0.2);border-radius:7px;cursor:pointer;color:rgba(196,181,253,0.4);font-size:10px;font-weight:500;transition:all .2s;background:transparent;font-family:'Inter',sans-serif;width:100%;}
+.oracle-add-row:hover{border-color:rgba(139,92,246,0.5);color:#C4B5FD;background:rgba(139,92,246,0.07);}
+.btn-icon{background:transparent;border:none;border-radius:5px;width:22px;height:22px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:rgba(196,181,253,0.3);transition:all .2s;font-size:9px;flex-shrink:0;}
+.btn-icon:hover{color:#FCA5A5;}
+.oracle-total-bar{background:rgba(109,40,217,0.15);border-radius:0 0 var(--radius) var(--radius);padding:8px 16px;display:none;align-items:center;gap:12px;flex-wrap:wrap;border-top:1px solid rgba(139,92,246,0.2);position:relative;z-index:1;}
+.oracle-total-bar.visible{display:flex;}
+.oracle-total-label{font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:rgba(196,181,253,0.45);white-space:nowrap;}
+.oracle-total-val{font-size:15px;font-weight:900;color:#EDE9FE;letter-spacing:-0.3px;}
+.oracle-total-sub{font-size:9px;color:rgba(196,181,253,0.35);font-weight:500;}
+#oracle-year2-block{display:flex;align-items:center;gap:6px;padding-left:12px;border-left:1px solid rgba(139,92,246,0.2);}
+
+/* CTA SIGN */
+.cta-sign{background:linear-gradient(135deg,#0f1f6e,#1E3A8A 60%,#2E4BC6);border-radius:var(--radius);padding:20px 24px;margin-bottom:var(--space-sm);position:relative;overflow:hidden;}
+.cta-sign::before{content:'';position:absolute;top:-50px;right:-50px;width:180px;height:180px;border-radius:50%;background:rgba(255,255,255,0.04);}
+.cta-sign-inner{position:relative;z-index:1;}
+.pandadoc-btn{display:inline-flex;align-items:center;gap:7px;background:white;color:var(--c-navy);border:none;height:40px;border-radius:var(--radius-sm);font-size:13px;font-weight:700;padding:0 20px;cursor:pointer;font-family:'Inter',sans-serif;transition:background .2s,transform .2s;box-shadow:var(--shadow-sm);}
+.pandadoc-btn:hover{background:var(--c-sky-50);transform:translateY(-1px);}
+.pandadoc-btn:disabled{opacity:0.6;cursor:not-allowed;transform:none;}
+#sign-success{display:none;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.18);border-radius:var(--radius-sm);padding:8px 14px;margin-top:12px;align-items:center;gap:8px;}
+.perk-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:14px;}
+@media(max-width:480px){.perk-grid{grid-template-columns:1fr 1fr;}}
+.perk-item{background:rgba(255,255,255,0.07);border-radius:var(--radius-sm);padding:9px 11px;border:1px solid rgba(255,255,255,0.07);}
+.perk-title{font-size:11px;font-weight:600;color:white;}
+.perk-sub{font-size:10px;color:rgba(255,255,255,0.4);margin-top:2px;font-weight:500;}
+
+/* REG STEPPER */
+.reg-stepper{display:flex;align-items:center;margin-bottom:20px;}
+.reg-step{display:flex;align-items:center;gap:6px;font-size:11px;font-weight:600;color:var(--c-muted);transition:color .3s;}
+.reg-step.active{color:var(--c-navy);}
+.reg-step.done{color:var(--c-green);}
+.reg-step-dot{width:22px;height:22px;border-radius:50%;background:var(--c-warm-100);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;flex-shrink:0;transition:background .3s;}
+.reg-step.active .reg-step-dot{background:var(--c-navy);color:white;box-shadow:0 0 0 3px rgba(30,58,138,0.12);}
+.reg-step.done .reg-step-dot{background:var(--c-green);color:white;}
+.reg-step-line{flex:1;height:1px;background:var(--c-border);margin:0 6px;transition:background .35s;}
+.reg-step-line.done{background:var(--c-green);}
+.reg-panel{display:none;}
+.reg-panel.active{display:block;animation:fadeUp .25s ease;}
+.company-search-wrap input{width:100%;height:46px;border:1.5px solid var(--c-border);border-radius:10px;font-size:14px;font-family:'Inter',sans-serif;padding:0 14px;background:var(--c-card);color:var(--c-text);outline:none;transition:border-color .2s,box-shadow .2s;font-weight:500;}
+.company-search-wrap input:focus{border-color:var(--c-navy);box-shadow:0 0 0 3px rgba(30,58,138,0.07);}
+.company-search-actions{display:flex;gap:8px;margin-top:10px;}
+.crm-result-box{border-radius:var(--radius);padding:14px 16px;margin-top:var(--space-sm);border:1px solid;animation:fadeUp .2s ease;}
+.crm-result-box.available{background:var(--c-green-bg);border-color:var(--c-green-bd);}
+.crm-result-box.review{background:#FFFBEB;border-color:#FCD34D;}
+.crm-result-header{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
+.crm-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+.dot-green{background:var(--c-green);}
+.dot-orange{background:#F97316;}
+.crm-status-label{font-size:13px;font-weight:700;}
+.crm-msg{font-size:12px;color:var(--c-slate-700);line-height:1.5;font-weight:500;}
+
+/* CLIENT TRACKER */
+.st-verificacion{background:var(--c-sky-50);color:var(--c-navy);border:1px solid var(--c-sky-200);}
+.st-demo{background:var(--c-green-bg);color:var(--c-green);border:1px solid var(--c-green-bd);}
+.st-negociacion{background:#FFFBEB;color:#92400E;border:1px solid #FCD34D;}
+.st-cierre{background:var(--c-purple-bg);color:var(--c-purple);border:1px solid var(--c-purple-bd);}
+.st-implementacion{background:#ECFDF5;color:#065F46;border:1px solid #6EE7B7;}
+.clients-section{margin-top:4px;}
+.clients-section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--space-sm);}
+.clients-section-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--c-navy);}
+.client-card{background:var(--c-card);border:1px solid var(--c-border);border-radius:var(--radius);padding:14px 16px;margin-bottom:var(--space-sm);cursor:pointer;transition:box-shadow .2s,border-color .2s,transform .2s;}
+.client-card:hover{box-shadow:var(--shadow-md);border-color:var(--c-sky-200);transform:translateY(-1px);}
+.client-card-top{display:flex;align-items:center;gap:12px;margin-bottom:10px;}
+.client-card-icon{width:34px;height:34px;border-radius:var(--radius-sm);background:var(--c-sky-50);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
+.client-card-info{flex:1;min-width:0;}
+.client-card-name{font-size:13px;font-weight:700;color:var(--c-text);}
+.client-card-meta{font-size:11px;color:var(--c-muted);margin-top:2px;font-weight:500;}
+.client-status-badge{display:inline-block;font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px;}
+.pipeline-bar{display:flex;gap:3px;margin-top:2px;}
+.pb-seg{height:3px;flex:1;border-radius:2px;background:var(--c-warm-200);transition:background .3s;}
+.pb-seg.done{background:var(--c-green);}
+.pb-seg.active{background:var(--c-navy);}
+.hs-sync-badge{display:inline-flex;align-items:center;gap:4px;font-size:9px;font-weight:600;color:var(--c-muted);background:var(--c-warm-100);border-radius:20px;padding:2px 8px;margin-top:6px;}
+.hs-sync-dot{width:5px;height:5px;border-radius:50%;background:#22C55E;animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
+
+/* DRAWER */
+.drawer-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.28);z-index:500;display:none;backdrop-filter:blur(3px);}
+.drawer-overlay.open{display:block;animation:fadeIn .2s ease;}
+.drawer{position:fixed;bottom:0;left:0;right:0;background:var(--c-card);z-index:501;transform:translateY(100%);transition:transform .35s cubic-bezier(0.22,1,0.36,1);display:flex;flex-direction:column;box-shadow:var(--shadow-lg);border-radius:20px 20px 0 0;max-height:88vh;}
+@media(min-width:640px){.drawer{top:0;right:0;bottom:0;left:auto;width:360px;max-height:none;border-radius:0;transform:translateX(100%);}}
+.drawer.open{transform:translate(0,0);}
+.drawer-handle{width:36px;height:4px;background:var(--c-border);border-radius:2px;margin:10px auto 0;flex-shrink:0;}
+@media(min-width:640px){.drawer-handle{display:none;}}
+.drawer-header{padding:16px;border-bottom:1px solid var(--c-border);display:flex;align-items:center;gap:12px;}
+.drawer-icon{width:38px;height:38px;border-radius:10px;background:var(--c-sky-50);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+.drawer-title{font-size:14px;font-weight:800;color:var(--c-text);}
+.drawer-meta{font-size:11px;color:var(--c-muted);margin-top:2px;font-weight:500;}
+.drawer-close{margin-left:auto;background:var(--c-warm-100);border:none;width:30px;height:30px;border-radius:var(--radius-sm);cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center;color:var(--c-muted);transition:background .2s;flex-shrink:0;}
+.drawer-close:hover{background:var(--c-warm-200);}
+.drawer-body{flex:1;overflow-y:auto;padding:20px;}
+.drawer-section{margin-bottom:20px;}
+.drawer-section-label{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--c-muted);margin-bottom:12px;}
+.drawer-pipeline{display:flex;flex-direction:column;}
+.dp-step{display:flex;gap:12px;padding-bottom:14px;}
+.dp-step:last-child{padding-bottom:0;}
+.dp-left{display:flex;flex-direction:column;align-items:center;width:18px;flex-shrink:0;}
+.dp-dot{width:18px;height:18px;border-radius:50%;border:2px solid var(--c-border);background:var(--c-card);display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;color:var(--c-muted);flex-shrink:0;z-index:1;transition:background .2s,border-color .2s;}
+.dp-dot.done{background:var(--c-green);border-color:var(--c-green);color:white;}
+.dp-dot.active{background:var(--c-navy);border-color:var(--c-navy);color:white;box-shadow:0 0 0 3px rgba(30,58,138,0.1);}
+.dp-line{flex:1;width:2px;background:var(--c-border);margin-top:2px;transition:background .2s;}
+.dp-line.done{background:var(--c-green);}
+.dp-step:last-child .dp-line{display:none;}
+.dp-content{padding-top:1px;flex:1;}
+.dp-name{font-size:12px;font-weight:700;color:var(--c-muted);}
+.dp-name.done{color:var(--c-green);}
+.dp-name.active{color:var(--c-navy);}
+.exec-card{background:var(--c-sky-50);border:1px solid var(--c-sky-200);border-radius:var(--radius);padding:12px 14px;display:flex;align-items:center;gap:12px;margin-bottom:10px;}
+.exec-avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--c-navy),var(--c-navy-soft));display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:white;flex-shrink:0;}
+.exec-name{font-size:12px;font-weight:700;color:var(--c-navy);}
+.exec-role{font-size:10px;color:var(--c-muted);margin-top:2px;font-weight:500;}
+
+/* DASHBOARD */
+.dash-hero{background:linear-gradient(135deg,#EBF0FA 0%,#E4EBF8 40%,#DCE5F5 100%);border-radius:var(--radius);padding:24px;margin-bottom:var(--space-md);position:relative;overflow:hidden;box-shadow:0 2px 12px rgba(30,58,138,0.06);border:1px solid #D6DFF0;}
+.dash-hero::before{content:'';position:absolute;top:-60px;right:-60px;width:200px;height:200px;border-radius:50%;background:rgba(59,85,196,0.05);pointer-events:none;}
+.dash-hero-top{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:4px;position:relative;z-index:1;}
+.dash-hero-title{font-size:15px;font-weight:800;color:var(--c-navy);}
+.dash-hero-sub{font-size:11px;color:#6B84C4;font-weight:500;margin-bottom:18px;position:relative;z-index:1;}
+.dash-period-badge{font-size:10px;font-weight:600;background:rgba(30,58,138,0.08);color:var(--c-navy);padding:3px 10px;border-radius:20px;border:1px solid rgba(30,58,138,0.15);}
+.dash-metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--space-sm);position:relative;z-index:1;}
+@media(max-width:520px){.dash-metrics{grid-template-columns:1fr;}}
+.dash-metric{background:rgba(255,255,255,0.75);border-radius:var(--radius);padding:16px;border:1px solid rgba(30,58,138,0.08);}
+.dash-metric-icon{font-size:18px;margin-bottom:10px;}
+.dash-metric-label{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#6B84C4;margin-bottom:5px;}
+.dash-metric-val{font-size:22px;font-weight:900;color:var(--c-navy);letter-spacing:-0.8px;line-height:1;}
+.dash-metric-val.green{color:#2563EB;}
+.dash-metric-val.amber{color:#3B55C4;}
+.dash-metric-sub{font-size:10px;color:#6B84C4;margin-top:5px;font-weight:500;}
+.dash-next-pay{background:#EFF6FF;border:1px solid #BFDBFE;border-radius:var(--radius);padding:14px 18px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:var(--space-md);}
+.dash-pay-left{display:flex;align-items:center;gap:12px;}
+.dash-pay-icon{width:38px;height:38px;background:var(--c-navy);border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;}
+.dash-pay-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#3B55C4;opacity:0.7;margin-bottom:3px;}
+.dash-pay-date{font-size:13px;font-weight:700;color:var(--c-navy);}
+.dash-pay-amount{font-size:22px;font-weight:900;color:var(--c-navy);letter-spacing:-0.5px;}
+.dash-pay-sub{font-size:10px;color:#3B55C4;opacity:0.6;font-weight:500;}
+.dash-breakdown-grid{display:grid;grid-template-columns:1fr 1fr;gap:var(--space-sm);}
+@media(max-width:480px){.dash-breakdown-grid{grid-template-columns:1fr;}}
+.dash-bk-item{background:var(--c-warm-50);border-radius:var(--radius-sm);padding:14px 16px;border:1px solid var(--c-border);}
+.dash-bk-item.recurring{background:var(--c-purple-bg);border-color:var(--c-purple-bd);}
+.dash-bk-label{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--c-muted);margin-bottom:6px;}
+.dash-bk-item.recurring .dash-bk-label{color:var(--c-purple);}
+.dash-bk-val{font-size:20px;font-weight:900;color:var(--c-navy);letter-spacing:-0.5px;}
+.dash-bk-item.recurring .dash-bk-val{color:var(--c-purple);}
+.dash-bk-sub{font-size:10px;color:var(--c-muted);margin-top:4px;font-weight:500;}
+.dash-chart-card{background:var(--c-card);border:1px solid var(--c-border);border-radius:var(--radius);padding:var(--space-md);margin-bottom:var(--space-sm);}
+.dash-chart-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;flex-wrap:wrap;gap:8px;}
+.dash-chart-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--c-navy);}
+.dash-chart-legend{display:flex;gap:14px;}
+.dash-legend-item{display:flex;align-items:center;gap:5px;font-size:10px;color:var(--c-muted);font-weight:500;}
+.dash-legend-dot{width:8px;height:8px;border-radius:2px;}
+.dash-legend-dot.y1{background:#2563EB;}
+.dash-legend-dot.y2{background:#93C5FD;}
+.dash-chart-wrap{display:flex;align-items:flex-end;gap:5px;height:140px;padding-bottom:26px;position:relative;}
+.dash-chart-wrap::after{content:'';position:absolute;bottom:26px;left:0;right:0;height:1px;background:var(--c-border);}
+.dash-grid-lines{position:absolute;inset:0 0 26px 0;display:flex;flex-direction:column;justify-content:space-between;pointer-events:none;}
+.dash-grid-line{width:100%;height:1px;background:var(--c-border);opacity:0.5;}
+.dash-bar-group{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;position:relative;height:100%;}
+.dash-bar-container{flex:1;width:100%;display:flex;align-items:flex-end;gap:2px;}
+.dash-bar{flex:1;border-radius:4px 4px 0 0;transition:height .8s cubic-bezier(0.22,1,0.36,1);}
+.dash-bar.y1{background:linear-gradient(180deg,#C5D3F0 0%,#A8BADF 100%);}
+.dash-bar.y2{background:linear-gradient(180deg,#C4B5FD,#8B5CF6);}
+.dash-bar-group:hover .dash-bar-tooltip{opacity:1;transform:translateX(-50%) translateY(-4px);}
+.dash-bar-tooltip{position:absolute;top:-36px;left:50%;transform:translateX(-50%);background:var(--c-text);color:white;font-size:9px;font-weight:700;padding:3px 7px;border-radius:6px;white-space:nowrap;pointer-events:none;opacity:0;transition:opacity .2s,transform .2s;z-index:10;}
+.dash-bar-tooltip::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:4px solid transparent;border-top-color:var(--c-text);}
+.dash-bar-label{font-size:8px;font-weight:600;color:var(--c-muted);text-align:center;position:absolute;bottom:4px;left:50%;transform:translateX(-50%);white-space:nowrap;}
+
+/* TOOLKIT */
+.toolkit-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--space-sm);margin-bottom:var(--space-sm);}
+@media(max-width:560px){.toolkit-grid{grid-template-columns:1fr;}}
+.toolkit-card{background:var(--c-card);border:1px solid var(--c-border);border-radius:var(--radius);padding:var(--space-md);display:flex;flex-direction:column;gap:var(--space-sm);transition:box-shadow .2s,transform .2s,border-color .2s;}
+.toolkit-card:hover{box-shadow:var(--shadow-md);border-color:var(--c-sky-200);transform:translateY(-2px);}
+.toolkit-card-icon{width:44px;height:44px;border-radius:var(--radius);display:flex;align-items:center;justify-content:center;font-size:22px;}
+.toolkit-card-icon.blue{background:var(--c-sky-50);}
+.toolkit-card-icon.green{background:var(--c-green-bg);}
+.toolkit-card-icon.purple{background:var(--c-purple-bg);}
+.toolkit-card-title{font-size:13px;font-weight:700;color:var(--c-text);}
+.toolkit-card-sub{font-size:11px;color:var(--c-muted);font-weight:500;line-height:1.5;flex:1;}
+.toolkit-card-btn{margin-top:auto;width:100%;height:36px;border-radius:var(--radius-sm);font-size:11px;font-weight:700;font-family:'Inter',sans-serif;cursor:pointer;transition:all .2s;border:none;display:flex;align-items:center;justify-content:center;gap:5px;}
+.toolkit-card-btn.primary{background:linear-gradient(135deg,var(--c-navy),var(--c-navy-soft));color:white;}
+.toolkit-card-btn.primary:hover{box-shadow:0 3px 10px rgba(30,58,138,0.25);transform:translateY(-1px);}
+.toolkit-card-btn.secondary{background:var(--c-sky-50);color:var(--c-navy);border:1.5px solid var(--c-navy);}
+.toolkit-card-btn.secondary:hover{background:var(--c-sky-100);}
+.toolkit-card-btn.green{background:var(--c-green-bg);color:var(--c-green);border:1px solid var(--c-green-bd);}
+.toolkit-card-btn.green:hover{background:#DCFCE7;}
+.toolkit-card-btn.purple{background:var(--c-purple-bg);color:var(--c-purple);border:1px solid var(--c-purple-bd);}
+.toolkit-card-btn.purple:hover{background:#EDE9FE;}
+
+/* AI CHAT */
+.ai-fab{position:fixed;bottom:24px;right:24px;z-index:400;display:none;}
+.ai-fab-btn{width:54px;height:54px;border-radius:50%;background:linear-gradient(135deg,var(--c-navy),var(--c-navy-soft));border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:22px;box-shadow:0 4px 20px rgba(30,58,138,0.35);transition:transform .2s,box-shadow .2s;position:relative;}
+.ai-fab-btn:hover{transform:scale(1.08);box-shadow:0 6px 24px rgba(30,58,138,0.45);}
+.ai-fab-pulse{position:absolute;inset:-4px;border-radius:50%;border:2px solid rgba(59,85,196,0.3);animation:fabPulse 2s ease-out infinite;}
+@keyframes fabPulse{0%{transform:scale(1);opacity:1}100%{transform:scale(1.5);opacity:0}}
+.ai-fab-badge{position:absolute;top:-2px;right:-2px;width:18px;height:18px;border-radius:50%;background:#EF4444;border:2px solid white;font-size:8px;font-weight:800;color:white;display:flex;align-items:center;justify-content:center;}
+.ai-chat-panel{position:fixed;bottom:90px;right:24px;width:360px;max-width:calc(100vw - 32px);background:var(--c-card);border-radius:20px;border:1px solid var(--c-border);box-shadow:0 12px 40px rgba(0,0,0,0.15);z-index:399;display:none;flex-direction:column;overflow:hidden;max-height:560px;}
+.ai-chat-panel.open{display:flex;animation:fadeUp .25s ease;}
+.ai-chat-header{background:linear-gradient(135deg,#0f1f6e,#2E4BC6);padding:14px 16px;display:flex;align-items:center;gap:10px;}
+.ai-chat-avatar{width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,0.15);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+.ai-chat-name{font-size:13px;font-weight:700;color:white;}
+.ai-chat-status{font-size:10px;color:rgba(255,255,255,0.55);margin-top:2px;display:flex;align-items:center;gap:4px;}
+.ai-online-dot{width:6px;height:6px;border-radius:50%;background:#4ADE80;}
+.ai-chat-close-btn{margin-left:auto;background:rgba(255,255,255,0.1);border:none;width:28px;height:28px;border-radius:7px;cursor:pointer;color:white;font-size:12px;display:flex;align-items:center;justify-content:center;transition:background .2s;}
+.ai-chat-close-btn:hover{background:rgba(255,255,255,0.2);}
+.ai-chat-messages{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:10px;}
+.ai-chat-messages::-webkit-scrollbar{width:3px;}
+.ai-chat-messages::-webkit-scrollbar-thumb{background:var(--c-border);border-radius:2px;}
+.ai-msg{max-width:88%;animation:fadeUp .2s ease;}
+.ai-msg.bot{align-self:flex-start;}
+.ai-msg.user{align-self:flex-end;}
+.ai-bubble{padding:10px 13px;font-size:12.5px;line-height:1.65;font-weight:450;}
+.ai-msg.bot .ai-bubble{background:#F1F5F9;color:var(--c-text);border-radius:4px 14px 14px 14px;}
+.ai-msg.user .ai-bubble{background:linear-gradient(135deg,var(--c-navy),var(--c-navy-soft));color:white;border-radius:14px 4px 14px 14px;}
+.ai-msg-time{font-size:9.5px;color:var(--c-muted);margin-top:3px;}
+.ai-msg.user .ai-msg-time{text-align:right;}
+.ai-pe-btn{margin-top:8px;display:inline-flex;align-items:center;gap:6px;padding:7px 13px;background:#F0FDF4;color:#15803D;border:1px solid #86EFAC;border-radius:9px;font-size:11.5px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;transition:background .2s;}
+.ai-pe-btn:hover{background:#DCFCE7;}
+.ai-typing-bubble{align-self:flex-start;background:#F1F5F9;border-radius:4px 14px 14px 14px;padding:11px 14px;display:flex;gap:5px;align-items:center;}
+.ai-typing-dot{width:6px;height:6px;border-radius:50%;background:#94A3B8;animation:bounce 1.2s infinite;}
+.ai-typing-dot:nth-child(2){animation-delay:.2s;}
+.ai-typing-dot:nth-child(3){animation-delay:.4s;}
+.ai-suggestions-row{display:flex;flex-wrap:wrap;gap:5px;padding:6px 14px 10px;}
+.ai-sugg-chip{background:#EEF4FF;color:var(--c-navy);border:1px solid #BFDBFE;border-radius:20px;padding:5px 11px;font-size:11px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:background .2s;white-space:nowrap;}
+.ai-sugg-chip:hover{background:#DBEAFE;}
+.ai-input-wrap{padding:10px 12px;border-top:1px solid var(--c-border);display:flex;gap:7px;align-items:center;}
+.ai-input{flex:1;height:36px;border:1.5px solid var(--c-border);border-radius:8px;font-size:12.5px;font-family:'Inter',sans-serif;padding:0 11px;background:var(--c-warm-50);color:var(--c-text);outline:none;transition:border-color .2s;}
+.ai-input:focus{border-color:var(--c-navy);}
+.ai-send{width:34px;height:34px;border-radius:8px;background:linear-gradient(135deg,var(--c-navy),var(--c-navy-soft));border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;color:white;font-size:14px;transition:box-shadow .2s;}
+.ai-send:hover{box-shadow:0 2px 8px rgba(30,58,138,0.3);}
+
+/* UTILS */
+.loading-dots{display:inline-flex;gap:4px;}
+.loading-dots span{width:5px;height:5px;border-radius:50%;background:var(--c-navy);animation:bounce 1.2s infinite;}
+.loading-dots span:nth-child(2){animation-delay:.2s;}
+.loading-dots span:nth-child(3){animation-delay:.4s;}
+@keyframes bounce{0%,80%,100%{transform:translateY(0)}40%{transform:translateY(-5px)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.footnote{text-align:center;font-size:11px;color:var(--c-muted);padding:10px 0 0;line-height:1.7;}
+.benefit-item{display:flex;gap:7px;margin-bottom:6px;}
+.benefit-item:last-child{margin-bottom:0;}
+.bchev{color:var(--c-navy-soft);font-weight:700;flex-shrink:0;margin-top:2px;}
+.btext{font-size:12px;color:var(--c-slate-600);line-height:1.55;font-weight:500;}
+.copy-feedback{font-size:11px;font-weight:600;opacity:0;transition:opacity .3s;}
+.copy-feedback.show{opacity:1;}
+@supports(padding:env(safe-area-inset-bottom)){.page-layout{padding-bottom:calc(80px + env(safe-area-inset-bottom));}}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login-screen">
+  <div class="login-blob login-blob-1"></div>
+  <div class="login-blob login-blob-2"></div>
+  <div class="login-box">
+    <div class="login-logo">humand</div>
+    <div class="login-tagline">Partners</div>
+    <div class="login-step visible" id="login-step1">
+      <div class="login-title">Bienvenido 👋</div>
+      <div class="lpt-wrap">
+        <div class="lpt-label">Tipo de partner</div>
+        <div class="lpt-grid">
+          <div class="lpt-option selected" data-type="rp"><div class="lpt-icon">🙋</div><div class="lpt-title">Referral</div><div class="lpt-sub">Partner individual</div></div>
+          <div class="lpt-option" data-type="bp"><div class="lpt-icon">🏢</div><div class="lpt-title">Business</div><div class="lpt-sub">Persona moral / consultora</div></div>
+        </div>
+      </div>
+      <div class="login-field">
+        <label id="login-org-label">Tu nombre</label>
+        <input type="text" id="login-community" placeholder="Ej: Juan García" autocomplete="off"/>
+        <div class="login-field-error" id="login-community-error">Este campo es requerido.</div>
+      </div>
+      <button class="login-btn" id="login-btn-step1">Continuar →</button>
+      <div class="login-trust">
+        <div class="login-trust-item">🏢 <span class="login-trust-val">1.5K+</span> empresas</div>
+        <div class="login-trust-item">🌎 <span class="login-trust-val">51</span> países</div>
+        <div class="login-trust-item">📦 <span class="login-trust-val">+30</span> industrias</div>
+      </div>
+    </div>
+    <div class="login-step hidden" id="login-step2">
+      <button class="login-back-btn" id="login-back-btn">← Volver</button>
+      <div class="login-org-banner">
+        <div class="login-org-avatar" id="login-org-avatar"></div>
+        <div><div class="login-org-name" id="login-org-name-display"></div><div class="login-org-type">Business Partner · Persona Moral</div></div>
+      </div>
+      <div class="login-title" style="font-size:17px;margin-bottom:20px;">Identificate en tu organización</div>
+      <div class="login-field">
+        <label>Usuario</label>
+        <input type="text" id="login-user-role" placeholder="Ej: axel_rangel" autocomplete="username" autocapitalize="none" spellcheck="false"/>
+        <div class="login-field-error" id="login-role-error">Ingresá tu usuario.</div>
+      </div>
+      <div class="login-field">
+        <label>Contraseña</label>
+        <div class="login-pwd-wrap">
+          <input type="password" id="login-password" placeholder="••••••••" autocomplete="current-password"/>
+          <button class="login-pwd-toggle" id="login-pwd-toggle" tabindex="-1">👁</button>
+        </div>
+        <div class="login-field-error" id="login-pwd-error">Ingresá tu contraseña.</div>
+      </div>
+      <button class="login-btn" id="login-btn-step2" style="margin-top:4px;">Ingresar →</button>
+      <p style="font-size:10px;color:#9CA3AF;text-align:center;margin-top:12px;font-weight:500;">Acceso seguro · sesión individual</p>
+    </div>
+  </div>
+</div>
+
+<!-- AI FAB -->
+<div class="ai-fab" id="ai-fab">
+  <div class="ai-chat-panel" id="ai-chat-panel">
+    <div class="ai-chat-header">
+      <div class="ai-chat-avatar">🤖</div>
+      <div>
+        <div class="ai-chat-name">Asistente Humand Partners</div>
+        <div class="ai-chat-status"><div class="ai-online-dot"></div> En línea · responde al instante</div>
+      </div>
+      <button class="ai-chat-close-btn" id="ai-chat-close">✕</button>
+    </div>
+    <div class="ai-chat-messages" id="ai-chat-messages"></div>
+    <div class="ai-suggestions-row" id="ai-suggestions"></div>
+    <div class="ai-input-wrap">
+      <input class="ai-input" id="ai-chat-input" placeholder="Escribí tu consulta..."/>
+      <button class="ai-send" id="ai-send-btn">➤</button>
+    </div>
+  </div>
+  <button class="ai-fab-btn" id="ai-fab-btn">
+    <div class="ai-fab-pulse"></div>🤖
+    <div class="ai-fab-badge" id="ai-fab-badge">1</div>
+  </button>
+</div>
+
+<!-- CERT MODALS -->
+<div id="cert-modal-sales" style="display:none;position:fixed;inset:0;z-index:3000;background:rgba(0,0,0,0.4);backdrop-filter:blur(4px);align-items:center;justify-content:center;padding:16px;">
+  <div style="background:#fff;border-radius:16px;width:100%;max-width:520px;max-height:88vh;display:flex;flex-direction:column;box-shadow:0 20px 60px rgba(0,0,0,0.2);overflow:hidden;">
+    <div style="background:linear-gradient(135deg,#1E3A8A,#2E4BC6);padding:18px 20px;display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-shrink:0;">
+      <div><div style="font-size:14px;font-weight:800;color:white;margin-bottom:3px;">📈 Sales Track — Etapas de trabajo en conjunto</div><div style="font-size:11px;color:rgba(255,255,255,0.55);">Capacitación Comercial · 5 semanas</div></div>
+      <button onclick="document.getElementById('cert-modal-sales').style.display='none'" style="background:rgba(255,255,255,0.15);border:none;width:30px;height:30px;border-radius:7px;cursor:pointer;color:white;font-size:14px;flex-shrink:0;">✕</button>
+    </div>
+    <div style="flex:1;overflow-y:auto;padding:8px 20px 16px;">
+      <div style="display:flex;gap:14px;padding:14px 0;border-bottom:1px solid #E2E8F0;"><div style="flex-shrink:0;display:flex;flex-direction:column;align-items:center;"><div style="width:40px;height:40px;border-radius:50%;background:#EEF4FF;border:2px solid #BFDBFE;display:flex;align-items:center;justify-content:center;font-size:18px;">👀</div><div style="width:2px;height:20px;background:#E2E8F0;margin:4px 0;"></div></div><div style="flex:1;padding-top:4px;"><div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px;margin-bottom:5px;"><div style="font-size:13px;font-weight:700;color:#1E293B;">Shadowing</div><div style="background:#EEF4FF;border:1px solid #BFDBFE;border-radius:20px;padding:3px 12px;font-size:12px;font-weight:800;color:#1E3A8A;">5 – 10 leads</div></div><div style="font-size:12px;color:#475569;line-height:1.55;">Acompañás al equipo comercial de Humand en demos y negociaciones.</div></div></div>
+      <div style="display:flex;gap:14px;padding:14px 0;border-bottom:1px solid #E2E8F0;"><div style="flex-shrink:0;display:flex;flex-direction:column;align-items:center;"><div style="width:40px;height:40px;border-radius:50%;background:#E0F2FE;border:2px solid #BAE6FD;display:flex;align-items:center;justify-content:center;font-size:18px;">🤝</div><div style="width:2px;height:20px;background:#E2E8F0;margin:4px 0;"></div></div><div style="flex:1;padding-top:4px;"><div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px;margin-bottom:5px;"><div style="font-size:13px;font-weight:700;color:#1E293B;">Guided Independence</div><div style="background:#E0F2FE;border:1px solid #BAE6FD;border-radius:20px;padding:3px 12px;font-size:12px;font-weight:800;color:#0369A1;">11 – 15 leads</div></div><div style="font-size:12px;color:#475569;line-height:1.55;">Liderás el proceso comercial con apoyo del equipo de Humand.</div></div></div>
+      <div style="display:flex;gap:14px;padding:14px 0;border-bottom:1px solid #E2E8F0;"><div style="flex-shrink:0;display:flex;flex-direction:column;align-items:center;"><div style="width:40px;height:40px;border-radius:50%;background:#F5F3FF;border:2px solid #DDD6FE;display:flex;align-items:center;justify-content:center;font-size:18px;">🚀</div><div style="width:2px;height:20px;background:#E2E8F0;margin:4px 0;"></div></div><div style="flex:1;padding-top:4px;"><div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px;margin-bottom:5px;"><div style="font-size:13px;font-weight:700;color:#1E293B;">Independent Execution</div><div style="background:#F5F3FF;border:1px solid #DDD6FE;border-radius:20px;padding:3px 12px;font-size:12px;font-weight:800;color:#7C3AED;">16 – 20 leads</div></div><div style="font-size:12px;color:#475569;line-height:1.55;">Liderás el proceso comercial de forma autónoma.</div></div></div>
+      <div style="display:flex;gap:14px;padding:14px 0;"><div style="flex-shrink:0;"><div style="width:40px;height:40px;border-radius:50%;background:#FFFBEB;border:2px solid #FCD34D;display:flex;align-items:center;justify-content:center;font-size:18px;">⭐</div></div><div style="flex:1;padding-top:4px;"><div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px;margin-bottom:5px;"><div style="font-size:13px;font-weight:700;color:#1E293B;">Full Independent Execution</div><div style="background:#FFFBEB;border:1px solid #FCD34D;border-radius:20px;padding:3px 12px;font-size:12px;font-weight:800;color:#B45309;">21 o más leads</div></div><div style="font-size:12px;color:#475569;line-height:1.55;">Operación 100% autónoma.</div></div></div>
+    </div>
+    <div style="padding:12px 20px;border-top:1px solid #E2E8F0;background:#F8FAFC;flex-shrink:0;"><div style="font-size:10px;color:#94A3B8;line-height:1.6;">* Para Guided Independence y siguientes etapas se requieren <strong style="color:#64748B;">ambas certificaciones activas</strong>.</div></div>
+  </div>
+</div>
+
+<div id="cert-modal-admin" style="display:none;position:fixed;inset:0;z-index:3000;background:rgba(0,0,0,0.4);backdrop-filter:blur(4px);align-items:center;justify-content:center;padding:16px;">
+  <div style="background:#fff;border-radius:16px;width:100%;max-width:520px;max-height:88vh;display:flex;flex-direction:column;box-shadow:0 20px 60px rgba(0,0,0,0.2);overflow:hidden;">
+    <div style="background:linear-gradient(135deg,#1E3A8A,#2E4BC6);padding:18px 20px;display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-shrink:0;">
+      <div><div style="font-size:14px;font-weight:800;color:white;margin-bottom:3px;">🛠️ Admin Track — Etapas de trabajo en conjunto</div><div style="font-size:11px;color:rgba(255,255,255,0.55);">Capacitación Técnica · 8 semanas</div></div>
+      <button onclick="document.getElementById('cert-modal-admin').style.display='none'" style="background:rgba(255,255,255,0.15);border:none;width:30px;height:30px;border-radius:7px;cursor:pointer;color:white;font-size:14px;flex-shrink:0;">✕</button>
+    </div>
+    <div style="flex:1;overflow-y:auto;padding:8px 20px 16px;">
+      <div style="display:flex;gap:14px;padding:14px 0;border-bottom:1px solid #E2E8F0;"><div style="flex-shrink:0;display:flex;flex-direction:column;align-items:center;"><div style="width:40px;height:40px;border-radius:50%;background:#EEF4FF;border:2px solid #BFDBFE;display:flex;align-items:center;justify-content:center;font-size:18px;">👀</div><div style="width:2px;height:20px;background:#E2E8F0;margin:4px 0;"></div></div><div style="flex:1;padding-top:4px;"><div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px;margin-bottom:5px;"><div style="font-size:13px;font-weight:700;color:#1E293B;">Shadowing</div><div style="background:#EEF4FF;border:1px solid #BFDBFE;border-radius:20px;padding:3px 12px;font-size:12px;font-weight:800;color:#1E3A8A;">1er y 2do cliente</div></div><div style="font-size:12px;color:#475569;line-height:1.55;">Acompañás al equipo de implementación de Humand.</div></div></div>
+      <div style="display:flex;gap:14px;padding:14px 0;border-bottom:1px solid #E2E8F0;"><div style="flex-shrink:0;display:flex;flex-direction:column;align-items:center;"><div style="width:40px;height:40px;border-radius:50%;background:#E0F2FE;border:2px solid #BAE6FD;display:flex;align-items:center;justify-content:center;font-size:18px;">🤝</div><div style="width:2px;height:20px;background:#E2E8F0;margin:4px 0;"></div></div><div style="flex:1;padding-top:4px;"><div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px;margin-bottom:5px;"><div style="font-size:13px;font-weight:700;color:#1E293B;">Guided Independence</div><div style="background:#E0F2FE;border:1px solid #BAE6FD;border-radius:20px;padding:3px 12px;font-size:12px;font-weight:800;color:#0369A1;">3er y 4to cliente</div></div><div style="font-size:12px;color:#475569;line-height:1.55;">Liderás la implementación con apoyo del equipo de Humand.</div></div></div>
+      <div style="display:flex;gap:14px;padding:14px 0;border-bottom:1px solid #E2E8F0;"><div style="flex-shrink:0;display:flex;flex-direction:column;align-items:center;"><div style="width:40px;height:40px;border-radius:50%;background:#F5F3FF;border:2px solid #DDD6FE;display:flex;align-items:center;justify-content:center;font-size:18px;">🚀</div><div style="width:2px;height:20px;background:#E2E8F0;margin:4px 0;"></div></div><div style="flex:1;padding-top:4px;"><div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px;margin-bottom:5px;"><div style="font-size:13px;font-weight:700;color:#1E293B;">Independent Execution</div><div style="background:#F5F3FF;border:1px solid #DDD6FE;border-radius:20px;padding:3px 12px;font-size:12px;font-weight:800;color:#7C3AED;">5to y 6to cliente</div></div><div style="font-size:12px;color:#475569;line-height:1.55;">Implementás de forma autónoma.</div></div></div>
+      <div style="display:flex;gap:14px;padding:14px 0;"><div style="flex-shrink:0;"><div style="width:40px;height:40px;border-radius:50%;background:#FFFBEB;border:2px solid #FCD34D;display:flex;align-items:center;justify-content:center;font-size:18px;">⭐</div></div><div style="flex:1;padding-top:4px;"><div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px;margin-bottom:5px;"><div style="font-size:13px;font-weight:700;color:#1E293B;">Full Independent Execution</div><div style="background:#FFFBEB;border:1px solid #FCD34D;border-radius:20px;padding:3px 12px;font-size:12px;font-weight:800;color:#B45309;">+7 clientes</div></div><div style="font-size:12px;color:#475569;line-height:1.55;">Operación técnica 100% autónoma.</div></div></div>
+    </div>
+    <div style="padding:12px 20px;border-top:1px solid #E2E8F0;background:#F8FAFC;flex-shrink:0;"><div style="font-size:10px;color:#94A3B8;line-height:1.6;">* Para Guided Independence y siguientes etapas se requieren <strong style="color:#64748B;">ambas certificaciones activas</strong>.</div></div>
+  </div>
+</div>
+
+<!-- DRAWER -->
+<div class="drawer-overlay" id="drawer-overlay"></div>
+<div class="drawer" id="drawer">
+  <div class="drawer-handle"></div>
+  <div class="drawer-header">
+    <div class="drawer-icon">🏢</div>
+    <div><div class="drawer-title" id="drawer-title"></div><div class="drawer-meta" id="drawer-meta"></div></div>
+    <button class="drawer-close" id="drawer-close">✕</button>
+  </div>
+  <div class="drawer-body">
+    <div class="drawer-section"><div class="drawer-section-label">Pipeline</div><div class="drawer-pipeline" id="drawer-pipeline"></div></div>
+    <div class="drawer-section"><div class="drawer-section-label">Partner Executive</div><div class="exec-card"><div class="exec-avatar" id="drawer-exec-avatar"></div><div><div class="exec-name" id="drawer-exec-name"></div><div class="exec-role">Partner Executive · Humand</div></div></div></div>
+    <div class="drawer-section"><div class="drawer-section-label">Account Executive</div><div class="exec-card" style="background:#F5F3FF;border-color:#DDD6FE;"><div class="exec-avatar" id="drawer-ae-avatar" style="background:linear-gradient(135deg,#5B21B6,#7C3AED);"></div><div><div class="exec-name" id="drawer-ae-name" style="color:#5B21B6;"></div><div class="exec-role">Account Executive · Humand</div></div></div></div>
+    <div class="drawer-section"><button class="btn btn-primary" id="drawer-contact-btn" style="width:100%;justify-content:center;">💬 Contactar a mi Partner Executive</button></div>
+  </div>
+</div>
+
+<!-- HEADER -->
+<header class="header" id="main-header" style="display:none;">
+  <div class="header-left">
+    <span class="logo">humand</span>
+    <div class="header-sep"></div>
+    <div class="community-chip">
+      <div class="community-chip-avatar" id="chip-avatar"></div>
+      <span class="community-chip-name" id="chip-name"></span>
+      <span class="community-chip-badge" id="chip-badge"></span>
+    </div>
+  </div>
+  <div class="header-right">
+    <div class="ycomb"><div class="ycomb-y">Y</div> YC Backed</div>
+    <div class="lang-selector">
+      <button class="lang-btn active" id="lang-es">ES</button>
+      <button class="lang-btn" id="lang-en">EN</button>
+      <button class="lang-btn" id="lang-pt">PT</button>
+    </div>
+    <div class="notif-wrap">
+      <button class="notif-bell-btn" id="notif-bell-btn">🔔<div class="notif-badge" id="notif-badge"></div></button>
+      <div class="notif-dropdown" id="notif-dropdown">
+        <div class="notif-hdr"><span class="notif-hdr-title">Notificaciones</span><button class="notif-mark-read" id="notif-mark-read">Marcar leídas</button></div>
+        <div class="notif-list" id="notif-list"></div>
+      </div>
+    </div>
+    <div class="user-menu-wrap">
+      <button class="user-avatar-btn" id="user-avatar-btn"><div class="u-avatar" id="user-avatar"></div><span class="u-chevron">▾</span></button>
+      <div class="user-dropdown" id="user-dropdown">
+        <div class="dd-profile">
+          <div class="dd-community" id="dd-community"></div>
+          <div class="dd-meta" id="dd-meta"></div>
+          <div class="dd-status-row"><div class="dd-status-dot" id="dd-status-dot"></div><span class="dd-status-label" id="dd-status-label"></span></div>
+        </div>
+        <button class="dd-item" id="dd-contract-btn">📄 <span id="dd-contract-link"></span></button>
+        <div class="dd-separator"></div>
+        <button class="dd-item danger" id="dd-logout">← Cerrar sesión</button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div id="contract-banner" style="display:none;" class="contract-banner pending">
+  <span id="cb-icon"></span><span id="contract-banner-txt"></span>
+  <span class="contract-banner-pandadoc" id="cb-pandadoc"></span>
+</div>
+
+<div class="hero" id="main-hero" style="display:none;">
+  <div class="hero-grid"></div><div class="hero-blob"></div>
+  <div class="hero-inner">
+    <div class="hero-eyebrow" id="hero-eyebrow">Programa de Partners</div>
+    <h1 id="hero-title">Sube de nivel siendo<br>Partner de Humand</h1>
+    <div class="hero-welcome" id="hero-welcome"></div>
+  </div>
+</div>
+
+<div class="trust-bar" id="main-trust" style="display:none;">
+  <div class="trust-item">🏢 <span class="trust-val">1.5K+</span> <span id="t-companies">empresas</span></div>
+  <div class="trust-item">👥 <span class="trust-val">1.6M+</span> <span id="t-users">usuarios</span></div>
+  <div class="trust-item">🌎 <span class="trust-val">51</span> <span id="t-countries">países</span></div>
+  <div class="trust-item">💰 <span class="trust-val">$5M USD</span> <span id="t-partners">por partners</span></div>
+</div>
+
+<div class="nav-tabs" id="main-nav" style="display:none;">
+  <button class="nav-tab" id="tab-dashboard" onclick="switchTab('dashboard')">💰 Comisiones</button>
+  <button class="nav-tab active" id="tab-partner" onclick="switchTab('partner')"><div class="nav-tab-dot"></div> Pipeline</button>
+  <button class="nav-tab" id="tab-materiales" onclick="switchTab('materiales')">📂 Materiales</button>
+  <button class="nav-tab" id="tab-certificacion" onclick="switchTab('certificacion')" style="display:none;">🎓 Certificación BP</button>
+</div>
+
+<div class="page-layout" id="main-layout" style="display:none;">
+  <div class="main-content">
+
+    <!-- DASHBOARD -->
+    <div class="tab-panel" id="panel-dashboard">
+      <div class="section-divider"><div class="section-divider-line"></div><div class="section-divider-label">💰 Resumen financiero</div><div class="section-divider-line"></div></div>
+      <div class="dash-hero">
+        <div class="dash-hero-top"><span class="dash-hero-title">Dashboard de Ganancias</span><span class="dash-period-badge" id="dash-period">2025</span></div>
+        <div class="dash-hero-sub" id="dash-hero-sub">Basado en tu pipeline actual en HubSpot</div>
+        <div class="dash-metrics">
+          <div class="dash-metric"><div class="dash-metric-icon">✅</div><div class="dash-metric-label">Comisiones acumuladas</div><div class="dash-metric-val green" id="dash-acumulado">$0</div><div class="dash-metric-sub">Cierre + Implementación</div></div>
+          <div class="dash-metric"><div class="dash-metric-icon">🎯</div><div class="dash-metric-label">Ingresos proyectados</div><div class="dash-metric-val amber" id="dash-proyectado">$0</div><div class="dash-metric-sub">Deals en negociación</div></div>
+          <div class="dash-metric"><div class="dash-metric-icon">📅</div><div class="dash-metric-label">Próximo pago</div><div class="dash-metric-val" id="dash-proximo-val">$0</div><div class="dash-metric-sub" id="dash-proximo-fecha">—</div></div>
+        </div>
+      </div>
+      <div class="dash-next-pay">
+        <div class="dash-pay-left"><div class="dash-pay-icon">💸</div><div><div class="dash-pay-label">Próximo pago estimado</div><div class="dash-pay-date" id="dash-pay-date">—</div></div></div>
+        <div style="text-align:right;"><div class="dash-pay-amount" id="dash-pay-amount">$0</div><div class="dash-pay-sub">transferencia bancaria</div></div>
+      </div>
+      <div id="dash-breakdown-section" style="display:none;">
+        <div class="section-divider"><div class="section-divider-line"></div><div class="section-divider-label">📊 Desglose por tipo</div><div class="section-divider-line"></div></div>
+        <div class="card" style="margin-bottom:var(--space-sm);"><div class="dash-breakdown-grid"><div class="dash-bk-item"><div class="dash-bk-label">Comisión Año 1</div><div class="dash-bk-val" id="dash-bk-y1">$0</div><div class="dash-bk-sub">50% del ACV de deals cerrados</div></div><div class="dash-bk-item recurring"><div class="dash-bk-label">Recurrencia estimada</div><div class="dash-bk-val" id="dash-bk-rec">$0</div><div class="dash-bk-sub">30% anual · años siguientes</div></div></div></div>
+      </div>
+      <div class="section-divider"><div class="section-divider-line"></div><div class="section-divider-label">📈 Proyección 12 meses</div><div class="section-divider-line"></div></div>
+      <div class="dash-chart-card">
+        <div class="dash-chart-header"><span class="dash-chart-title">Crecimiento estimado de ganancias</span><div class="dash-chart-legend"><div class="dash-legend-item"><div class="dash-legend-dot y1"></div>Año 1</div><div class="dash-legend-item" id="chart-legend-y2" style="display:none;"><div class="dash-legend-dot y2"></div>Recurrencia</div></div></div>
+        <div class="dash-chart-wrap" id="dash-chart-wrap"><div class="dash-grid-lines"><div class="dash-grid-line"></div><div class="dash-grid-line"></div><div class="dash-grid-line"></div></div></div>
+        <div style="font-size:10px;color:var(--c-muted);margin-top:10px;font-weight:500;text-align:center;">* Proyección acumulada asumiendo cierre de deals en negociación</div>
+      </div>
+    </div>
+
+    <!-- CERT -->
+    <div class="tab-panel" id="panel-certificacion"><div id="cert-flow-root"></div></div>
+
+    <!-- MATERIALES -->
+    <div class="tab-panel" id="panel-materiales">
+      <div class="section-divider"><div class="section-divider-line"></div><div class="section-divider-label">📂 Sales Toolkit</div><div class="section-divider-line"></div></div>
+      <div class="toolkit-grid">
+        <div class="toolkit-card"><div class="toolkit-card-icon blue">🗂️</div><div class="toolkit-card-title">Kit comercial</div><div class="toolkit-card-sub">Documento completo con argumentarios, propuestas y recursos de venta para partners.</div><button class="toolkit-card-btn secondary" onclick="window.open('https://docs.google.com/document/d/1QF-hWVNGLgsl8s1uySOpq-0zTVXwh0ia2rYHwIkUg8c/edit','_blank')">📖 Ver kit comercial</button></div>
+        <div class="toolkit-card"><div class="toolkit-card-icon green">🏆</div><div class="toolkit-card-title">Casos de éxito</div><div class="toolkit-card-sub">Historias reales de empresas que transformaron su RRHH con Humand.</div><button class="toolkit-card-btn green" onclick="window.open('https://humand.co/es/casos-de-exito/','_blank')">✨ Ver casos de éxito</button></div>
+        <div class="toolkit-card"><div class="toolkit-card-icon purple">📦</div><div class="toolkit-card-title">Descripción de módulos</div><div class="toolkit-card-sub">Presentación detallada de cada módulo con funcionalidades y casos de uso.</div><button class="toolkit-card-btn purple" onclick="window.open('https://docs.google.com/presentation/d/1rJbishCH19H3YLDcnP9mLUGPoCRQQFM_cqeqFumFQ88/edit','_blank')">📊 Ver módulos</button></div>
+        <div class="toolkit-card"><div class="toolkit-card-icon" style="background:#FEF3C7;">🎬</div><div class="toolkit-card-title">Playlist para partners</div><div class="toolkit-card-sub">Videos exclusivos en YouTube con capacitaciones, demos y tips de ventas.</div><button class="toolkit-card-btn" style="background:#FEF3C7;color:#92400E;border:1px solid #FCD34D;" onclick="window.open('https://www.youtube.com/playlist?list=PLcp3hvhOUd6E6CvwO3OTCWtNJrn9QVoA2','_blank')">▶ Ver playlist</button></div>
+        <div class="toolkit-card"><div class="toolkit-card-icon blue">📄</div><div class="toolkit-card-title">Humand Description</div><div class="toolkit-card-sub">Documento de referencia con la descripción oficial y propuesta de valor.</div><button class="toolkit-card-btn secondary" onclick="window.open('https://drive.google.com/file/d/1V_GZy3ZY-GbhzgLXJ2TUQ6I_OwuqNess/view','_blank')">⬇ Ver documento</button></div>
+        <div class="toolkit-card"><div class="toolkit-card-icon" style="background:#FEE2E2;">🖥️</div><div class="toolkit-card-title">Demo de plataforma</div><div class="toolkit-card-sub">Video completo con recorrido por la plataforma Humand, ideal para mostrar al cliente.</div><button class="toolkit-card-btn" style="background:#FEE2E2;color:#DC2626;border:1px solid #FCA5A5;" onclick="window.open('https://www.youtube.com/watch?v=p1_U85wcKgU','_blank')">▶ Ver demo</button></div>
+      </div>
+    </div>
+
+    <!-- PIPELINE -->
+    <div class="tab-panel active" id="panel-partner">
+      <div class="section-divider step1-section"><div class="section-divider-line"></div><div class="section-divider-label" id="step1-label">Elegí tu modelo</div><div class="section-divider-line"></div></div>
+      <div class="step1-section">
+        <div id="acc-rp" class="model-accordion"><div class="acc-header" id="acc-rp-header"><div style="display:flex;align-items:center;gap:10px;"><span style="font-size:17px;">🙋</span><div><div class="acc-title" id="rp-title">Referral Partner</div><div class="acc-subtitle" id="rp-sub">Para consultores de HR</div></div></div><div class="acc-right"><span id="badge-rp" class="acc-selected-badge" style="display:none;">✓</span><span class="acc-commission" id="rp-comm">50% · año 1</span><span class="acc-chevron" id="chev-rp">▾</span></div></div><div class="acc-body" id="body-rp"><div class="acc-body-inner"><ul class="model-list" id="rp-list" style="margin-bottom:12px;"></ul><div class="acc-commission-box"><div class="hl-label">Comisión</div><div class="hl-val" id="rp-commission-val">50% del ACV · año 1</div></div></div></div></div>
+        <div id="acc-bp" class="model-accordion"><div class="acc-header" id="acc-bp-header"><div style="display:flex;align-items:center;gap:10px;"><span style="font-size:17px;">🏢</span><div><div class="acc-title" id="bp-title">Business Partner</div><div class="acc-subtitle" id="bp-sub">Para consultoras con equipo</div></div></div><div class="acc-right"><span id="badge-bp" class="acc-selected-badge" style="display:none;">✓</span><span class="acc-commission" id="bp-comm">50% año 1 + 30%</span><span class="acc-chevron" id="chev-bp">▾</span></div></div><div class="acc-body" id="body-bp"><div class="acc-body-inner"><ul class="model-list" id="bp-list" style="margin-bottom:12px;"></ul><div class="acc-commission-box"><div class="hl-label">Comisión</div><div class="hl-val" id="bp-commission-val">50% año 1 + 30% recurrente</div></div><div style="margin-top:12px;background:rgba(255,255,255,0.06);border-radius:10px;padding:12px 14px;border:1px solid rgba(255,255,255,0.1);"><div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:rgba(255,255,255,0.4);margin-bottom:10px;">📋 Requisitos para activar BP</div><div style="display:flex;flex-direction:column;gap:6px;"><div style="display:flex;align-items:center;gap:8px;font-size:11px;color:rgba(255,255,255,0.75);font-weight:500;"><span>📈</span><span><strong style="color:white;">Sales Certification</strong> — Examen teórico + mock en vivo</span></div><div style="display:flex;align-items:center;gap:8px;font-size:11px;color:rgba(255,255,255,0.75);font-weight:500;"><span>🛠️</span><span><strong style="color:white;">Admin Certification</strong> — Comunidad desde cero</span></div><div style="display:flex;align-items:center;gap:8px;font-size:11px;color:rgba(255,255,255,0.75);font-weight:500;"><span>👥</span><span>Mínimo <strong style="color:white;">1 Implementador + 1 Vendedor</strong> certificados</span></div><div style="display:flex;align-items:center;gap:8px;font-size:11px;color:rgba(255,255,255,0.75);font-weight:500;"><span>💰</span><span><strong style="color:white;">Fee anual USD 1,000</strong> + cuota 200K ARR</span></div></div><div style="margin-top:10px;padding-top:9px;border-top:1px solid rgba(255,255,255,0.1);font-size:10px;color:rgba(255,255,255,0.35);font-weight:500;">Categoría inicial: ⭐ Partner Gold</div></div></div></div></div>
+      </div>
+
+      <div class="section-divider"><div class="section-divider-line"></div><div class="section-divider-label">🔮 Proyección de clientes</div><div class="section-divider-line"></div></div>
+      <div class="oracle-shell">
+        <div class="oracle-header"><span class="oracle-crystal">🔮</span><div><span class="oracle-title-text">Oráculo de Portfolio</span><span class="oracle-subtitle-txt">· Calculá comisiones al instante</span></div></div>
+        <div class="oracle-calc"><div class="oracle-toolbar"><div class="field" style="flex:2;"><select id="industria"></select><span class="oracle-field-error" id="err-industria"></span></div><div class="field" style="flex:1;max-width:110px;"><input type="number" id="empleados" placeholder="# empleados" min="1"/><span class="oracle-field-error" id="err-empleados"></span></div><button class="oracle-calc-btn" id="calc-btn">🔮 Calcular</button><button class="oracle-clear-btn" id="clear-calc-btn" style="display:none;">✕</button></div></div>
+        <div id="oracle-results" class="oracle-results">
+          <div class="oracle-divider" style="margin-top:0;"></div>
+          <div style="padding:10px 0;">
+            <div id="oracle-commission-hero"></div>
+            <div id="oracle-metrics-grid" class="oracle-metrics-grid"></div>
+            <div class="oracle-two-col">
+              <div class="oracle-inner-card"><div class="section-label" id="benefits-title">✨ Beneficios clave</div><div id="beneficios-list"></div></div>
+              <div class="oracle-inner-card"><div class="section-label" id="modules-title">📦 Módulos</div><div id="modulos-list" style="margin-bottom:10px;"></div><div class="section-label" id="why-title">🚀 Por qué Humand</div><div class="benefit-item"><span class="bchev" style="color:#C4B5FD;">›</span><span class="btext" id="why1">Impl. en menos de 4 semanas</span></div><div class="benefit-item"><span class="bchev" style="color:#C4B5FD;">›</span><span class="btext" id="why2">100% nube · SAP, Workday</span></div><div class="benefit-item"><span class="bchev" style="color:#C4B5FD;">›</span><span class="btext" id="why3">82% adopción · ROI 3 meses</span></div></div>
+            </div>
+            <div class="oracle-inner-card" id="caso-exito-card" style="margin-bottom:10px;"></div>
+            <div class="oracle-inner-card" style="margin-bottom:10px;"><div class="oracle-summary-toggle" id="summary-toggle"><span class="oracle-summary-title" id="summary-title">📄 Propuesta para el cliente</span><span class="acc-chevron" id="summary-chevron" style="color:#C4B5FD;font-size:10px;">▾</span></div><div id="summary-body" style="display:none;"><div id="summary-box" class="oracle-summary-box"></div><div class="oracle-summary-actions"><button class="oracle-btn-sec" id="copy-btn">📋 Copiar</button><button class="oracle-btn-sec oracle-btn-wa" id="wa-btn">💬 WhatsApp</button><span id="copy-feedback" class="copy-feedback" style="color:#4ADE80;font-size:10px;">¡Copiado!</span></div></div></div>
+          </div>
+        </div>
+        <div class="oracle-portfolio-sep"><div class="oracle-divider" style="margin:0 0 10px;"></div><div class="oracle-portfolio-toggle" id="portfolio-toggle"><div class="oracle-portfolio-label">🗂 Proyección de portfolio</div><span class="oracle-portfolio-chevron" id="portfolio-chevron">▾</span></div></div>
+        <div class="oracle-portfolio-body" id="oracle-portfolio-body"><div class="oracle-portfolio-inner" style="padding-top:8px;"><div id="oracle-rows"></div><button class="oracle-add-row" id="add-client-btn">+ Agregar cliente</button></div></div>
+        <div class="oracle-total-bar" id="oracle-total" style="display:none;">
+          <div style="display:flex;align-items:center;gap:6px;"><span class="oracle-total-label" id="oracle-total-label">Total Año 1:</span><span class="oracle-total-val" id="oracle-total-val"></span><span class="oracle-total-sub" id="oracle-total-sub"></span></div>
+          <div id="oracle-year2-block" style="display:none;"><span class="oracle-total-label" id="oracle-year2-label">Recurrencia:</span><span class="oracle-total-val" style="font-size:13px;color:rgba(196,181,253,0.8);" id="oracle-year2-val"></span><span class="oracle-total-sub" id="oracle-year2-sub"></span></div>
+        </div>
+      </div>
+
+      <div class="section-divider step3-section"><div class="section-divider-line"></div><div class="section-divider-label" id="step3-label">Firmá el acuerdo</div><div class="section-divider-line"></div></div>
+      <div class="cta-sign step3-section"><div class="cta-sign-inner">
+        <h3 style="font-size:14px;font-weight:800;color:white;margin-bottom:4px;" id="cta-title">🚀 Unite a la revolución digital de HR</h3>
+        <p style="font-size:11px;color:rgba(255,255,255,0.45);margin-bottom:14px;font-weight:500;" id="cta-sub">Firmá el acuerdo de partnership directamente en PandaDoc.</p>
+        <button class="pandadoc-btn" id="sign-btn">✍️ Firmar contrato</button>
+        <div id="sign-success"><span style="font-size:14px;">🎉</span><span style="font-size:12px;font-weight:700;color:white;" id="signed-msg">¡Contrato firmado!</span></div>
+        <div class="perk-grid">
+          <div class="perk-item"><div class="perk-title" id="perk1">💰 50% comisión</div><div class="perk-sub" id="perk1-sub">primer año</div></div>
+          <div class="perk-item"><div class="perk-title" id="perk2">🎯 Soporte</div><div class="perk-sub" id="perk2-sub">Partner Executive</div></div>
+          <div class="perk-item"><div class="perk-title" id="perk3">📦 Materiales</div><div class="perk-sub" id="perk3-sub">Brochures y demos</div></div>
+          <div class="perk-item"><div class="perk-title" id="perk4">📊 Dashboard</div><div class="perk-sub" id="perk4-sub">Seguimiento</div></div>
+        </div>
+      </div></div>
+
+      <div class="section-divider"><div class="section-divider-line"></div><div class="section-divider-label" id="step4-label">Registrá tu cliente</div><div class="section-divider-line"></div></div>
+      <div class="card">
+        <div class="reg-stepper">
+          <div class="reg-step active" id="rs1"><div class="reg-step-dot" id="rs1-dot">1</div><span id="rs1-lbl">Verificar</span></div>
+          <div class="reg-step-line" id="rsl1"></div>
+          <div class="reg-step" id="rs2"><div class="reg-step-dot" id="rs2-dot">2</div><span id="rs2-lbl">Agendar demo</span></div>
+          <div class="reg-step-line" id="rsl2"></div>
+          <div class="reg-step" id="rs3"><div class="reg-step-dot" id="rs3-dot">3</div><span id="rs3-lbl">Listo ✓</span></div>
+        </div>
+        <div class="reg-panel active" id="reg-p1">
+          <p style="font-size:12px;color:var(--c-muted);margin-bottom:12px;font-weight:500;" id="check-sub">Ingresá el nombre o dominio de la empresa para verificar si ya existe en nuestro CRM.</p>
+          <div class="company-search-wrap"><input type="text" id="hs-company" placeholder="Ej: acme.com"/></div>
+          <div class="company-search-actions"><button class="btn btn-primary" id="verify-btn" style="flex:1;justify-content:center;">Verificar disponibilidad</button></div>
+          <div id="hs-loading" style="display:none;align-items:center;gap:10px;margin-top:12px;font-size:12px;color:var(--c-muted);font-weight:500;"><div class="loading-dots"><span></span><span></span><span></span></div><span id="crm-loading-text">Consultando HubSpot...</span></div>
+          <div id="crm-result"></div>
+        </div>
+        <div class="reg-panel" id="reg-p2">
+          <div style="background:var(--c-green-bg);border:1px solid var(--c-green-bd);border-radius:10px;padding:12px 14px;margin-bottom:14px;display:flex;align-items:center;gap:10px;"><span style="font-size:16px;">✅</span><div><div style="font-size:13px;font-weight:700;color:var(--c-green);" id="demo-company-name"></div><div style="font-size:11px;color:var(--c-slate-700);margin-top:2px;font-weight:500;" id="check-sub2">Empresa disponible.</div></div></div>
+          <button class="btn btn-primary" id="demo-btn" style="width:100%;justify-content:center;">📆 Agendar demo con el cliente</button>
+          <button class="btn btn-ghost" id="back-to-verify" style="width:100%;justify-content:center;margin-top:8px;">← Buscar otra empresa</button>
+          <div id="demo-loading" style="display:none;align-items:center;gap:10px;margin-top:12px;font-size:12px;color:var(--c-muted);font-weight:500;"><div class="loading-dots"><span></span><span></span><span></span></div><span>Buscando disponibilidad...</span></div>
+        </div>
+        <div class="reg-panel" id="reg-p3">
+          <div style="background:var(--c-green-bg);border:1px solid var(--c-green-bd);border-radius:var(--radius);padding:14px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+            <div style="display:flex;align-items:center;gap:10px;"><span style="font-size:16px;">✅</span><div><div style="font-size:13px;font-weight:700;color:var(--c-green);" id="demo-confirmed">¡Demo agendada!</div><div style="font-size:12px;color:var(--c-slate-700);margin-top:2px;font-weight:500;" id="demo-exec-note"></div></div></div>
+            <div style="display:flex;align-items:center;gap:7px;"><button class="btn btn-secondary btn-sm" id="copy-demo-btn">📤 Copiar</button><button class="btn btn-primary btn-sm" id="new-client-btn">+ Registrar otro</button></div>
+          </div>
+          <span id="copy-demo-feedback" class="copy-feedback" style="display:block;text-align:center;margin-top:6px;font-size:11px;"></span>
+          <div style="font-size:11px;font-weight:600;color:var(--c-navy);margin-top:8px;" id="clients-so-far"></div>
+          <span id="demo-date" style="display:none;"></span><span id="demo-time" style="display:none;"></span>
+        </div>
+      </div>
+
+      <div class="section-divider" id="tracker-divider" style="display:none;"><div class="section-divider-line"></div><div class="section-divider-label">📊 Client Tracker</div><div class="section-divider-line"></div></div>
+      <div id="clients-section" class="clients-section" style="display:none;">
+        <div class="clients-section-header"><div class="clients-section-title" id="history-title">Mis clientes</div><div class="hs-sync-badge"><div class="hs-sync-dot"></div> Sync HubSpot</div></div>
+        <div id="clients-list"></div>
+      </div>
+      <div class="footnote" id="footnote">* Precios estimados en USD. La propuesta final puede variar según negociación.</div>
+    </div>
+  </div>
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="profile-sidebar-card">
+      <div class="psb-community" id="psb-community"></div>
+      <div class="psb-type" id="psb-type"></div>
+      <div class="psb-row"><span class="psb-key">Contrato</span><span class="psb-val psb-val-link" id="psb-contract" onclick="window.open('https://www.pandadoc.com','_blank')"></span></div>
+      <div class="psb-row"><span class="psb-key">Alta</span><span class="psb-val" id="psb-date"></span></div>
+      <div class="psb-badge" id="psb-badge"></div>
+    </div>
+    <div class="sidebar-card">
+      <div class="sidebar-label" id="progress-label">Tu progreso</div>
+      <div class="step-list">
+        <div class="step-item active" id="s-step1"><div class="step-num-s">1</div><div class="step-text" id="sb-step1">Elegí tu modelo</div></div>
+        <div class="step-item" id="s-step2"><div class="step-num-s">2</div><div class="step-text" id="sb-step2">Consultá el Oráculo</div></div>
+        <div class="step-item" id="s-step3"><div class="step-num-s">3</div><div class="step-text" id="sb-step3">Firmá el acuerdo</div></div>
+        <div class="step-item" id="s-step4"><div class="step-num-s">4</div><div class="step-text" id="sb-step4">Registrá tu cliente</div></div>
+      </div>
+    </div>
+    <div class="sidebar-card" id="sb-pipeline-card" style="display:none;">
+      <div class="sidebar-label">Pipeline · HubSpot</div>
+      <div id="sb-pipeline-list"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+const PIPELINE=[{key:'verificacion',es:'Verificación',en:'Verification',pt:'Verificação',cls:'st-verificacion',icon:'🔍'},{key:'demo',es:'Demo Agendada',en:'Demo Scheduled',pt:'Demo Agendada',cls:'st-demo',icon:'📆'},{key:'negociacion',es:'En Negociación',en:'In Negotiation',pt:'Em Negociação',cls:'st-negociacion',icon:'🤝'},{key:'cierre',es:'Cierre',en:'Closing',pt:'Fechamento',cls:'st-cierre',icon:'🎯'},{key:'implementacion',es:'Implementación',en:'Implementation',pt:'Implementação',cls:'st-implementacion',icon:'🚀'}];
+const PARTNER_EXECS=['Marcos Muñoz','Valentina Herrera','Santiago Romero','Lucía Peralta','Tomás Aguirre'];
+const ACCOUNT_EXECS=['Sofía Rangel','Nicolás Vidal','Camila Sosa','Rodrigo Ferreyra','Florencia Ibáñez'];
+const LS_KEY='humand_profile_v6';
+const TIERS=[{min:1,max:99,ppu:6},{min:100,max:299,ppu:4.5},{min:300,max:749,ppu:3},{min:750,max:1999,ppu:2},{min:2000,max:3999,ppu:1.5},{min:4000,max:9999,ppu:0.75},{min:10000,max:14999,ppu:0.5},{min:15000,max:24999,ppu:0.45},{min:25000,max:49999,ppu:0.3},{min:50000,max:999999,ppu:0.15}];
+const MODELS={rp:{rate1:0.5,rateRecurring:0},bp:{rate1:0.5,rateRecurring:0.3}};
+
+const IND={
+  metalurgica:{emoji:'⚙️',es:{beneficios:['Comunicación directa con operarios sin email','Control de asistencia y turnos desde el celular','Digitalización de legajos y documentos','Capacitaciones de seguridad sin computadoras'],caso:{empresa:'ArcelorMittal',cita:'Humand nos permitió llegar a cada operario en su celular.',metricas:[{val:'+80%',lbl:'adopción'},{val:'30%',lbl:'menos admin'},{val:'4 sem',lbl:'impl.'}]}},en:{beneficios:['Direct comms without corporate email','Mobile attendance & shift control','Record digitization','Safety training any device'],caso:{empresa:'ArcelorMittal',cita:'Humand allowed us to reach every worker on their phone.',metricas:[{val:'+80%',lbl:'adoption'},{val:'30%',lbl:'less admin'},{val:'4 wks',lbl:'impl.'}]}},pt:{beneficios:['Comunicação direta sem e-mail','Controle de frequência pelo celular','Digitalização de documentos','Treinamentos de segurança'],caso:{empresa:'ArcelorMittal',cita:'A Humand nos permitiu alcançar cada operário pelo celular.',metricas:[{val:'+80%',lbl:'adoção'},{val:'30%',lbl:'menos admin'},{val:'4 sem',lbl:'impl.'}]}},modulos:['Social Feed','Magazine','Time Tracking','Employee Documents','Forms & Workflows','Onboarding']},
+  retail:{emoji:'🛍️',es:{beneficios:['Gestión centralizada en múltiples sucursales','Onboarding ágil para alta rotación','Reconocimientos para mejorar retención','Comunicación segmentada por local'],caso:{empresa:'OXXO',cita:'Con Humand logramos estandarizar el onboarding en todas nuestras tiendas.',metricas:[{val:'60%',lbl:'menos onboarding'},{val:'+10%',lbl:'retención'},{val:'500+',lbl:'tiendas'}]}},en:{beneficios:['Centralized multi-location management','Agile onboarding','Recognition programs','Segmented comms'],caso:{empresa:'OXXO',cita:'With Humand we standardized onboarding across all stores.',metricas:[{val:'60%',lbl:'less onboarding'},{val:'+10%',lbl:'retention'},{val:'500+',lbl:'stores'}]}},pt:{beneficios:['Gestão centralizada','Onboarding ágil','Reconhecimento','Comunicação segmentada'],caso:{empresa:'OXXO',cita:'Com a Humand padronizamos o onboarding em todas as lojas.',metricas:[{val:'60%',lbl:'menos onboarding'},{val:'+10%',lbl:'retenção'},{val:'500+',lbl:'lojas'}]}},modulos:['Social Feed','Onboarding','Time Tracking','Kudos','Surveys','Perks & Benefits']},
+  logistica:{emoji:'🚚',es:{beneficios:['Comunicación en tiempo real con equipos en ruta','Control de asistencia geolocalizada','Documentación y firma digital','Notificaciones push urgentes'],caso:{empresa:'USA Truck Brokers',cita:'Hoy toda la operación está conectada en tiempo real.',metricas:[{val:'5x',lbl:'velocidad'},{val:'100%',lbl:'docs digitales'},{val:'200+',lbl:'empleados'}]}},en:{beneficios:['Real-time field comms','Geolocated attendance','Digital docs','Push notifications'],caso:{empresa:'USA Truck Brokers',cita:'Today the entire operation is connected in real time.',metricas:[{val:'5x',lbl:'speed'},{val:'100%',lbl:'digital docs'},{val:'200+',lbl:'employees'}]}},pt:{beneficios:['Comunicação em tempo real','Controle geolocalizado','Documentação digital','Notificações push'],caso:{empresa:'USA Truck Brokers',cita:'Toda a operação está conectada em tempo real.',metricas:[{val:'5x',lbl:'velocidade'},{val:'100%',lbl:'docs digitais'},{val:'200+',lbl:'funcionários'}]}},modulos:['Social Feed','Time Tracking','Employee Documents','Electronic Signature','Forms & Workflows']},
+  construccion:{emoji:'🏗️',es:{beneficios:['Control de presentismo por obra','Firma digital en campo','Capacitaciones de seguridad móviles','Gestión en múltiples obras'],caso:{empresa:'Grupo Werthein',cita:'La firma electrónica eliminó el papeleo.',metricas:[{val:'100%',lbl:'firma digital'},{val:'45%',lbl:'menos ausentismo'},{val:'3 sem',lbl:'impl.'}]}},en:{beneficios:['Attendance by job site','Digital signing in field','Safety training','Multi-site management'],caso:{empresa:'Grupo Werthein',cita:'Electronic signatures eliminated all paperwork.',metricas:[{val:'100%',lbl:'digital signing'},{val:'45%',lbl:'less absenteeism'},{val:'3 wks',lbl:'impl.'}]}},pt:{beneficios:['Controle de presença','Assinatura digital','Treinamentos','Múltiplas obras'],caso:{empresa:'Grupo Werthein',cita:'A assinatura eletrônica eliminou a papelada.',metricas:[{val:'100%',lbl:'assinatura digital'},{val:'45%',lbl:'menos absenteísmo'},{val:'3 sem',lbl:'impl.'}]}},modulos:['Time Tracking','Employee Documents','Electronic Signature','Forms & Workflows','Training']},
+  salud:{emoji:'🏥',es:{beneficios:['Gestión automática de guardias y francos','Encuestas de bienestar para personal exigido','Documentación y firma digital','Comunicación por área o turno'],caso:{empresa:'Swiss Medical',cita:'Humand nos permitió digitalizar la gestión de turnos.',metricas:[{val:'40%',lbl:'menos conflictos'},{val:'NPS +45',lbl:'satisfacción'},{val:'180+',lbl:'profesionales'}]}},en:{beneficios:['Automated shift management','Wellbeing surveys','Digital documentation','Comms by area/shift'],caso:{empresa:'Swiss Medical',cita:'Humand allowed us to digitize shift management.',metricas:[{val:'40%',lbl:'less conflicts'},{val:'NPS +45',lbl:'satisfaction'},{val:'180+',lbl:'professionals'}]}},pt:{beneficios:['Gestão de plantões','Pesquisas de bem-estar','Documentação digital','Comunicação por turno'],caso:{empresa:'Swiss Medical',cita:'A Humand nos permitiu digitalizar a gestão de escalas.',metricas:[{val:'40%',lbl:'menos conflitos'},{val:'NPS +45',lbl:'satisfação'},{val:'180+',lbl:'profissionais'}]}},modulos:['Forms & Workflows','Time off','Surveys','People Experience','Employee Documents','Training']},
+  servicios:{emoji:'💼',es:{beneficios:['Reconocimientos y objetivos para retener talento','Portal de autogestión RRHH','Planes de carrera integrados','eNPS y encuestas de engagement'],caso:{empresa:'BDO',cita:'Los módulos de objetivos transformaron la gestión del talento.',metricas:[{val:'85%',lbl:'autogestión'},{val:'eNPS +38',lbl:'en 6 meses'},{val:'3 sem',lbl:'impl.'}]}},en:{beneficios:['Recognition and goals for retention','Self-service HR portal','Career plans','eNPS surveys'],caso:{empresa:'BDO',cita:'The goals modules transformed talent management.',metricas:[{val:'85%',lbl:'self-service'},{val:'eNPS +38',lbl:'in 6 months'},{val:'3 wks',lbl:'impl.'}]}},pt:{beneficios:['Reconhecimento e objetivos','Portal de autoatendimento','Planos de carreira','eNPS'],caso:{empresa:'BDO',cita:'Os módulos de objetivos transformaram a gestão de talentos.',metricas:[{val:'85%',lbl:'autoatendimento'},{val:'eNPS +38',lbl:'em 6 meses'},{val:'3 sem',lbl:'impl.'}]}},modulos:['Social Feed','Goals','Performance Review','Employee Development','Kudos','Time off']},
+  agro:{emoji:'🌾',es:{beneficios:['Gestión de personal temporario','Documentación digital para campo','Comunicación sin conectividad permanente','Control de asistencia geolocalizada'],caso:{empresa:'Franuí',cita:'Digitalizamos el proceso de cosecha y nos comunicamos con cada colaborador en el campo.',metricas:[{val:'120+',lbl:'temporarios'},{val:'50%',lbl:'menos papeleo'},{val:'100%',lbl:'docs digitales'}]}},en:{beneficios:['Seasonal workforce management','Field-ready digital docs','Offline comms','Geolocated attendance'],caso:{empresa:'Franuí',cita:'We digitized the harvest process.',metricas:[{val:'120+',lbl:'seasonal workers'},{val:'50%',lbl:'less paperwork'},{val:'100%',lbl:'digital docs'}]}},pt:{beneficios:['Gestão de temporários','Docs em campo','Comunicação offline','Controle geolocalizado'],caso:{empresa:'Franuí',cita:'Digitalizamos o processo de colheita.',metricas:[{val:'120+',lbl:'temporários'},{val:'50%',lbl:'menos papelada'},{val:'100%',lbl:'docs digitais'}]}},modulos:['Magazine','Time Tracking','Employee Documents','Electronic Signature','Forms & Workflows']},
+  tecnologia:{emoji:'💻',es:{beneficios:['eNPS y encuestas de pulso para retención','Objetivos y evaluaciones 360°','Reconocimientos para equipos remotos','Onboarding digital en 2 días'],caso:{empresa:'Seidor',cita:'Humand nos ayudó a construir una cultura sólida en un equipo distribuido globalmente.',metricas:[{val:'eNPS +52',lbl:'en 6 meses'},{val:'95%',lbl:'adopción'},{val:'2 días',lbl:'onboarding'}]}},en:{beneficios:['eNPS and pulse surveys','360° goals and reviews','Peer recognition remote','Structured onboarding'],caso:{empresa:'Seidor',cita:'Humand helped us build a strong culture across a globally distributed team.',metricas:[{val:'eNPS +52',lbl:'in 6 months'},{val:'95%',lbl:'adoption'},{val:'2 days',lbl:'onboarding'}]}},pt:{beneficios:['eNPS e pesquisas de pulso','Objetivos e avaliações 360°','Reconhecimento remoto','Onboarding digital'],caso:{empresa:'Seidor',cita:'A Humand nos ajudou a construir cultura sólida em equipe distribuída.',metricas:[{val:'eNPS +52',lbl:'em 6 meses'},{val:'95%',lbl:'adoção'},{val:'2 dias',lbl:'onboarding'}]}},modulos:['People Experience','Goals','Performance Review','Employee Development','Kudos','Social Feed','Onboarding']}
+};
+
+const LANGS={
+  es:{hero_eyebrow:'Programa de Partners',hero_title:'Sube de nivel siendo<br>Partner de Humand',t_companies:'empresas',t_users:'usuarios',t_countries:'países',t_partners:'por partners',step1_label:'Elegí tu modelo',rp_title:'Referral Partner',rp_sub:'Para consultores de HR y profesionales independientes',bp_title:'Business Partner',bp_sub:'Para consultoras con equipo comercial',rp_comm:'50% · año 1',bp_comm:'50% año 1 + 30%',rp_commission_val:'50% del ACV · año 1',bp_commission_val:'50% año 1 + 30% recurrente',rp_items:['Humand cierra el deal','Materiales y soporte incluidos','Sin compromisos de volumen'],bp_items:['Fee anual de compromiso','Certificación para implementar','Control total del deal','Comisiones recurrentes sin límite'],industry_placeholder:'Selecciona una industria...',benefits_title:'✨ Beneficios clave',modules_title:'📦 Módulos',why_title:'🚀 Por qué Humand',why1:'Impl. en menos de 4 semanas',why2:'100% nube · SAP, Workday',why3:'82% adopción · ROI 3 meses',case_title:'🏆 Caso de éxito',summary_title:'📄 Propuesta para el cliente',copied:'¡Copiado!',step3_label:'Firmá el acuerdo',cta_title:'🚀 Unite a la revolución digital de HR',cta_sub:'Firmá el acuerdo directamente en PandaDoc.',signed_msg:'¡Contrato firmado!',perk1:'💰 50% comisión',perk1_sub:'primer año',perk2:'🎯 Soporte',perk2_sub:'Partner Executive',perk3:'📦 Materiales',perk3_sub:'Brochures y demos',perk4:'📊 Dashboard',perk4_sub:'Seguimiento',step4_label:'Registrá tu cliente',check_sub:'Ingresá el nombre o dominio de la empresa para verificar en nuestro CRM.',crm_loading:'Consultando HubSpot...',demo_confirmed:'¡Demo agendada!',hs_available:'Empresa disponible',hs_review:'Empresa en revisión',hs_available_msg:'No hay deal activo. Podés agendar la demo.',hs_review_msg:'Esta empresa ya tiene actividad. Contactá a tu Partner Executive.',year1:'Año 1',year2:'Año 2+',monthly_label:'Mensual',err_industry:'Selecciona una industria.',err_employees:'Ingresá la cantidad de empleados.',history_title:'Mis clientes',step_verify:'Verificar',step_schedule:'Agendar demo',step_done:'Listo ✓',new_client_txt:'{n} cliente(s) registrado(s)',contract_pending:'Contrato pendiente de firma.',contract_signed:'Contrato firmado ✓',contract_pandadoc:'Firmar en PandaDoc →',contract_see:'Ver contrato →',level_silver:'Partner Silver',level_gold:'Partner Gold',level_platinum:'Partner Platinum',contract_status_signed:'Firmado ✓',contract_status_pending:'Pendiente',hero_welcome:'Bienvenido/a,',oracle_year1:'Total Año 1:',oracle_year2:'Recurrencia:',footnote:'* Precios estimados en USD.',industries:{metalurgica:'Metalúrgica / Manufactura',retail:'Retail / Comercio',logistica:'Logística / Distribución',construccion:'Construcción / Inmobiliaria',salud:'Salud / Farmacéutica',servicios:'Servicios Profesionales',agro:'Agro / Alimentos',tecnologia:'Tecnología / Software'}},
+  en:{hero_eyebrow:'Partner Program',hero_title:'Level up as a<br>Humand Partner',t_companies:'companies',t_users:'users',t_countries:'countries',t_partners:'via partners',step1_label:'Choose your model',rp_title:'Referral Partner',rp_sub:'For HR consultants and independent professionals',bp_title:'Business Partner',bp_sub:'For consulting firms with a sales team',rp_comm:'50% · year 1',bp_comm:'50% yr1 + 30%',rp_commission_val:'50% of ACV · year 1',bp_commission_val:'50% year 1 + 30% recurring',rp_items:['Humand closes the deal','Materials and support included','No volume commitments'],bp_items:['Annual commitment fee','Certification to implement','Full deal control','Unlimited recurring commissions'],industry_placeholder:'Select an industry...',benefits_title:'✨ Key benefits',modules_title:'📦 Modules',why_title:'🚀 Why Humand',why1:'Implementation in under 4 weeks',why2:'100% cloud · SAP, Workday',why3:'82% avg adoption · ROI in 3 months',case_title:'🏆 Success story',summary_title:'📄 Client proposal',copied:'Copied!',step3_label:'Sign the agreement',cta_title:'🚀 Join the HR digital revolution',cta_sub:'Sign the partnership agreement directly in PandaDoc.',signed_msg:'Contract signed!',perk1:'💰 50% commission',perk1_sub:'first year',perk2:'🎯 Support',perk2_sub:'Partner Executive',perk3:'📦 Materials',perk3_sub:'Brochures & demos',perk4:'📊 Dashboard',perk4_sub:'Tracking',step4_label:'Register your client',check_sub:'Enter the company name or domain to verify in our CRM.',crm_loading:'Checking HubSpot...',demo_confirmed:'Demo scheduled!',hs_available:'Company available',hs_review:'Company under review',hs_available_msg:'No active deal. You can schedule the demo.',hs_review_msg:'This company has activity. Contact your Partner Executive.',year1:'Year 1',year2:'Year 2+',monthly_label:'Monthly',err_industry:'Select an industry.',err_employees:'Enter employee count.',history_title:'My clients',step_verify:'Verify',step_schedule:'Schedule demo',step_done:'Done ✓',new_client_txt:'{n} client(s) registered',contract_pending:'Contract pending signature.',contract_signed:'Contract signed ✓',contract_pandadoc:'Sign in PandaDoc →',contract_see:'View contract →',level_silver:'Partner Silver',level_gold:'Partner Gold',level_platinum:'Partner Platinum',contract_status_signed:'Signed ✓',contract_status_pending:'Pending',hero_welcome:'Welcome,',oracle_year1:'Year 1 Total:',oracle_year2:'Recurring:',footnote:'* Prices estimated in USD.',industries:{metalurgica:'Manufacturing',retail:'Retail / Commerce',logistica:'Logistics / Distribution',construccion:'Construction / Real Estate',salud:'Health / Pharma',servicios:'Professional Services',agro:'Agriculture / Food',tecnologia:'Technology / Software'}},
+  pt:{hero_eyebrow:'Programa de Parceiros',hero_title:'Suba de nível sendo<br>Parceiro da Humand',t_companies:'empresas',t_users:'usuários',t_countries:'países',t_partners:'via parceiros',step1_label:'Escolha seu modelo',rp_title:'Referral Partner',rp_sub:'Para consultores de RH',bp_title:'Business Partner',bp_sub:'Para consultorias com equipe',rp_comm:'50% · ano 1',bp_comm:'50% ano1 + 30%',rp_commission_val:'50% do ACV · ano 1',bp_commission_val:'50% ano 1 + 30% recorrente',rp_items:['Humand fecha o negócio','Materiais e suporte incluídos','Sem compromissos de volume'],bp_items:['Taxa anual de compromisso','Certificação para implementar','Controle total do negócio','Comissões recorrentes ilimitadas'],industry_placeholder:'Selecione um setor...',benefits_title:'✨ Benefícios',modules_title:'📦 Módulos',why_title:'🚀 Por que Humand',why1:'Implementação em menos de 4 semanas',why2:'100% nuvem · SAP, Workday',why3:'82% taxa de uso · ROI em 3 meses',case_title:'🏆 Caso de sucesso',summary_title:'📄 Proposta para o cliente',copied:'Copiado!',step3_label:'Assine o acordo',cta_title:'🚀 Junte-se à revolução digital de RH',cta_sub:'Assine o acordo de parceria diretamente no PandaDoc.',signed_msg:'Contrato assinado!',perk1:'💰 50% comissão',perk1_sub:'primeiro ano',perk2:'🎯 Suporte',perk2_sub:'Partner Executive',perk3:'📦 Materiais',perk3_sub:'Brochures e demos',perk4:'📊 Dashboard',perk4_sub:'Acompanhamento',step4_label:'Registre seu cliente',check_sub:'Insira o nome ou domínio da empresa para verificar no CRM.',crm_loading:'Consultando HubSpot...',demo_confirmed:'Demo agendada!',hs_available:'Empresa disponível',hs_review:'Empresa em revisão',hs_available_msg:'Nenhum deal ativo. Você pode agendar a demo.',hs_review_msg:'Esta empresa tem atividade. Contate seu Partner Executive.',year1:'Ano 1',year2:'Ano 2+',monthly_label:'Mensal',err_industry:'Selecione um setor.',err_employees:'Insira a quantidade de funcionários.',history_title:'Meus clientes',step_verify:'Verificar',step_schedule:'Agendar demo',step_done:'Pronto ✓',new_client_txt:'{n} cliente(s) registrado(s)',contract_pending:'Contrato pendente.',contract_signed:'Contrato assinado ✓',contract_pandadoc:'Assinar no PandaDoc →',contract_see:'Ver contrato →',level_silver:'Partner Silver',level_gold:'Partner Gold',level_platinum:'Partner Platinum',contract_status_signed:'Assinado ✓',contract_status_pending:'Pendente',hero_welcome:'Bem-vindo/a,',oracle_year1:'Total Ano 1:',oracle_year2:'Recorrência:',footnote:'* Preços estimados em USD.',industries:{metalurgica:'Metalurgia / Manufatura',retail:'Varejo / Comércio',logistica:'Logística / Distribuição',construccion:'Construção / Imobiliário',salud:'Saúde / Farmacêutica',servicios:'Serviços Profissionais',agro:'Agro / Alimentos',tecnologia:'Tecnologia / Software'}}
+};
+
+const NOTIFS=[{id:1,icon:'🎯',iconCls:'blue',text:'<strong>Arcor S.A.</strong> pasó a <strong>Implementación</strong>.',time:'Hace 5 min',unread:true},{id:2,icon:'🤝',iconCls:'amber',text:'<strong>Banco Galicia</strong> avanzó a <strong>Negociación</strong>.',time:'Hace 23 min',unread:true},{id:3,icon:'📆',iconCls:'green',text:'Demo con <strong>OSDE</strong> confirmada para mañana.',time:'Hace 1 h',unread:true},{id:4,icon:'⭐',iconCls:'purple',text:'¡Subiste a nivel <strong>Partner Gold</strong>!',time:'Hace 2 h',unread:false},{id:5,icon:'💰',iconCls:'green',text:'Pago de <strong>USD 5,400</strong> procesado.',time:'Ayer',unread:false}];
+
+let profile=null,currentLang='es',selectedModel=null,currentResult=null;
+let clientsHistory=[],currentCRMResult=null,drawerClientId=null;
+let oracleRows=[{id:1,industry:'tecnologia',employees:500}],oracleCounter=2;
+let currentTab='partner',portfolioOpen=false,AI_OPEN=false;
+const AVG_PPU=3,AVG_EMP=300;
+let loginPartnerType='rp',loginOrgName='';
+const certState={feePaid:false,salesTrackDone:false,adminTrackDone:false,independenceDone:false};
+
+const AI_KB_RP={
+  programa:{kw:['programa','partnership','referral','qué es','como funciona','cómo funciona','unirme','empezar','qué hago'],ans:`<strong>🙋 Referral Partner Program</strong><br><br>Sos el perfil ideal si sos consultor de RR.HH., comunicador interno, software integrator o profesional independiente.<br><br><strong>¿Cómo funciona?</strong><br>1. Ofrecés Humand a tu red o prospectás<br>2. Agendás una <strong>primera reunión</strong> con el potencial cliente<br>3. ¡Humand hace el resto! → demo, negociación, cierre, onboarding<br><br>✅ <strong>Sin compromisos de volumen. Sin fee. Sin certificación.</strong>`},
+  comisiones:{kw:['comisión','comision','cuánto gano','cuanto gano','revenue','porcentaje','pago','cobrar','ganar','dinero','ingresos','acv'],ans:`<strong>💰 Comisiones Referral Partner</strong><br><br>Comisionás el <strong>50% del revenue del deal</strong> durante el <strong>primer año</strong>.<br><br><strong>Ejemplo:</strong><br>Empresa de 500 empleados → ACV ≈ USD 18,000/año<br>→ Tu comisión Año 1: <strong>USD 9,000</strong><br><br>📊 Usá el <strong>Oráculo de Portfolio</strong> para calcular tu comisión exacta.`},
+  proceso:{kw:['proceso','cómo vendo','como vendo','vender','ciclo','pasos','qué tengo que hacer'],ans:`<strong>🔄 Proceso comercial RP</strong><br><br><strong>1.</strong> Vos agendás la primera reunión.<br><strong>2.</strong> Un comercial de Humand presenta la <strong>demo customizada</strong>.<br><strong>3.</strong> El equipo gestiona firma y pago.<br><strong>4.</strong> Kick Off — el cliente empieza con Humand.<br><br>⏱ Ciclo ágil: <strong>2 a 4 meses</strong>.`},
+  herramientas:{kw:['herramienta','material','brochure','kit','recurso'],ans:`<strong>📂 Tu kit de ventas</strong><br><br>› ✉️ Modelos de correo para prospectar<br>› 📱 Comunidad Demo en tu celular<br>› 🏆 Casos de referencia por industria<br>› 📋 Brochures y Presentaciones<br>› 🎬 Videos y Demo completa<br><br>Todo en la sección <strong>📂 Materiales</strong>.`},
+  roi:{kw:['roi','retorno','resultados','beneficio','convencer','argumentos','objeción','caro','precio'],ans:`<strong>📊 Por qué los clientes compran Humand</strong><br><br>› ROI en <strong>3 meses</strong><br>› 📱 <strong>82%</strong> tasa de uso promedio<br>› 💌 <strong>30%</strong> menos emails internos<br>› 👥 <strong>10%</strong> más retención<br>› ⚡ <strong>300%</strong> más compromiso<br>› 🕐 <strong>3 horas</strong> ahorradas/empleado/semana`},
+  clientes:{kw:['cliente','empresa','industria','sector','quién usa','casos','éxito','referencias'],ans:`<strong>🏆 Clientes de referencia</strong><br><br><strong>+1,500 clientes</strong> en <strong>+50 países</strong>.<br><br>OXXO · ArcelorMittal · Swiss Medical · Seidor · BDO · Farmacity · Grupo Werthein<br><br>🛍️ OXXO — -60% tiempo onboarding<br>⚙️ ArcelorMittal — +80% adopción<br>💻 Seidor — eNPS +52`},
+  producto:{kw:['qué hace','módulos','plataforma','app','humand','rrhh'],ans:`<strong>📱 ¿Qué es Humand?</strong><br><br>App <strong>todo en uno para RR.HH.</strong> — conecta a toda la organización incluso sin email corporativo.<br><br>📢 Comunicación · 📋 Gestión RR.HH. · ⚙️ Operaciones · 🌟 Cultura · 📈 Desarrollo<br><br>🔗 Integra con SAP, SuccessFactors, Workday.<br>✅ Implementación en menos de <strong>4 semanas</strong>.`},
+  registro:{kw:['registrar','registro','agregar cliente','nuevo cliente','hubspot','crm'],ans:`<strong>📝 Registrar un cliente</strong><br><br><strong>1.</strong> Verificar en HubSpot si está disponible.<br><strong>2.</strong> Si está disponible, agendar la demo.<br><strong>3.</strong> Seguir el avance en el <strong>Client Tracker</strong>.<br><br>⚠️ Si la empresa ya tiene actividad, tu Partner Executive te orienta.`}
+};
+
+const AI_KB_BP={
+  programa:{kw:['programa','business partner','bp','qué es','como funciona','unirme'],ans:`<strong>🏢 Business Partner Program</strong><br><br>Para <strong>consultoras con equipo comercial</strong> que gestionan el ciclo completo.<br><br>› Control total del deal<br>› Precio preferencial (descuento sobre lista)<br>› Facturación directa al cliente<br>› Soporte: Partner Executive + Partner Success Manager + Marketing Executive<br><br>✅ Categoría inicial: <strong>⭐ Partner Gold</strong>`},
+  comisiones:{kw:['comisión','comision','cuánto gano','revenue','porcentaje','margen','ingresos'],ans:`<strong>💰 Modelo de ingresos BP</strong><br><br><strong>Margen sobre licencias:</strong> Accedés a precios con descuento. Definís libremente el precio final al cliente.<br><br><strong>Precios de referencia (USD/user/mes):</strong><br>50-99 emp → $6 lista · ~$3 descuento<br>100-299 → $4.5 · ~$2.5<br>300-749 → $3 · ~$1.6<br>750-1,999 → $2 · ~$1<br>2,000+ → desde $1.5 a $0.5`},
+  sla:{kw:['sla','horas','onboarding','implementación','soporte','tiempo'],ans:`<strong>⏱ SLA — Horas mínimas por cliente</strong><br><br><strong>Mid-Market (hasta 1,000 emp):</strong><br>› Onboarding: 5 hrs/mes × 4 meses · Success: 4 hrs/mes<br><br><strong>Enterprise (1,000–3,000 emp):</strong><br>› Onboarding: 10 hrs/mes × 6 meses · Success: 8 hrs/mes<br><br><strong>Large Enterprise (+3,000 emp):</strong><br>› Onboarding: 12 hrs/mes × 15 meses · Success: 16 hrs/mes`},
+  modelos:{kw:['modelo','cómo vendo','propuesta','básico','intermedio','completo'],ans:`<strong>📦 Modelos de venta BP</strong><br><br><strong>Básico:</strong> Licencia con margen + SLA mínimo.<br><strong>Intermedio:</strong> Licencia + SLA + setup inicial.<br><strong>Completo:</strong> Licencia + SLA + setup + consultoría continua.<br><br>💡 En modelos 2 y 3 podés facturar horas de consultoría adicionalmente.`},
+  equipo:{kw:['equipo','soporte','partner executive','success manager','apoyo','quién me ayuda'],ans:`<strong>👥 Tu equipo de soporte</strong><br><br><strong>🎯 Partner Executive:</strong> Aliado comercial. Planificación, seguimiento de pipeline, metas.<br><strong>✅ Partner Success Manager:</strong> Certificación, implementaciones, SLA y renovaciones.<br><strong>📣 Marketing Executive:</strong> Materiales personalizados, contenido y eventos.`},
+  certificaciones:{kw:['certificación','certificacion','sales','admin','capacitación','examen'],ans:`<strong>🎓 Certificaciones requeridas</strong><br><br><strong>Sales Certification:</strong> Examen teórico + mock de venta en vivo.<br><strong>Admin Certification:</strong> Examen + armado de comunidad desde cero.<br><br><strong>Mínimo:</strong> 1 vendedor + 1 consultor certificados.<br><br>📌 Ver en pestaña <strong>🎓 Certificación BP</strong>.`},
+  requisitos:{kw:['requisitos','fee','activar bp','cuánto cuesta','cuota','arr'],ans:`<strong>📋 Requisitos para activar BP</strong><br><br>1️⃣ Sales Certification<br>2️⃣ Admin Certification<br>3️⃣ Fee anual: <strong>USD 1,000</strong><br>4️⃣ Quota estimada: <strong>200K ARR</strong><br><br>Al activar: Partner Gold · precios preferenciales · facturación directa`}
+};
+
+const SUGG_RP=['¿Cuánto comisiono?','¿Cómo es el proceso de venta?','¿Qué herramientas tengo?','¿Por qué compran Humand?'];
+const SUGG_BP=['¿Cuánto puedo ganar?','¿Cuáles son los modelos de venta?','¿Qué soporte tengo de Humand?','¿Cuáles son los requisitos?'];
+const SUGG_RP_FOLLOW=['¿Cómo registro un cliente?','Ver clientes de referencia','¿Qué módulos tiene Humand?','¿Cómo funciona el proceso?'];
+const SUGG_BP_FOLLOW=['¿Cómo es el SLA?','¿Cuáles son las certificaciones?','¿Cuáles son los requisitos?','¿Qué soporte tengo?'];
+
+function aiFind(msg){
+  const l=msg.toLowerCase();
+  const kb=(profile?.partnerType==='bp')?AI_KB_BP:AI_KB_RP;
+  let best=null,score=0;
+  for(const k in kb){let s=0;for(const kw of kb[k].kw)if(l.includes(kw))s+=kw.length;if(s>score){score=s;best=kb[k];}}
+  return score>0?best.ans:null;
+}
+function aiGetSugg(initial=true){
+  const isRP=profile?.partnerType!=='bp';
+  return initial?(isRP?SUGG_RP:SUGG_BP):(isRP?SUGG_RP_FOLLOW:SUGG_BP_FOLLOW);
+}
+
+const $=id=>document.getElementById(id);
+const fmtUSD=n=>new Intl.NumberFormat('es-AR',{style:'currency',currency:'USD',minimumFractionDigits:0,maximumFractionDigits:0}).format(Math.round(n));
+const getPPU=n=>{for(const t of TIERS)if(n>=t.min&&n<=t.max)return t.ppu;return 0.15;};
+const getSizeLabel=n=>n<100?'Pequeña':n<300?'Mediana':n<750?'Med-Grande':n<2000?'Grande':n<10000?'Corporativo':'Enterprise';
+const initials=s=>s.trim().split(/\s+/).slice(0,2).map(w=>w[0].toUpperCase()).join('');
+const getLevel=n=>n>=10?'platinum':n>=3?'gold':'silver';
+const getLevelLabel=l=>LANGS[currentLang]['level_'+l]||'Partner Silver';
+const getLevelEmoji=l=>l==='platinum'?'💎':l==='gold'?'⭐':'🥈';
+const stageLabel=k=>{const s=PIPELINE.find(x=>x.key===k);return s?s[currentLang]:k;};
+const stageCls=k=>{const s=PIPELINE.find(x=>x.key===k);return s?s.cls:'st-verificacion';};
+const stageIcon=k=>{const s=PIPELINE.find(x=>x.key===k);return s?s.icon:'🔍';};
+const stageIdx=k=>PIPELINE.findIndex(x=>x.key===k);
+const clientACV=c=>c.acv||(AVG_PPU*AVG_EMP*12);
+const clientComY1=c=>clientACV(c)*(MODELS[profile?.partnerType]||MODELS.rp).rate1;
+const clientComRec=c=>clientACV(c)*((MODELS[profile?.partnerType]||MODELS.rp).rateRecurring||0);
+const getPCO=emp=>getPPU(emp)*emp*12*(MODELS[selectedModel]||MODELS.rp).rate1;
+const nowTime=()=>{const d=new Date();return d.getHours()+':'+String(d.getMinutes()).padStart(2,'0');};
+
+function animateCounter(el,target){
+  const s=performance.now(),d=1200;
+  const run=now=>{const p=Math.min((now-s)/d,1),e=p<0.5?4*p*p*p:1-Math.pow(-2*p+2,3)/2;el.textContent=fmtUSD(Math.round(e*target));if(p<1)requestAnimationFrame(run);else el.textContent=fmtUSD(target);};
+  requestAnimationFrame(run);
+}
+function setStepState(s,state){const el=$('s-step'+s);if(!el)return;el.className='step-item';requestAnimationFrame(()=>{if(state==='active')el.classList.add('active');else if(state==='done')el.classList.add('done');});}
+
+const saveProfile=()=>profile&&localStorage.setItem(LS_KEY,JSON.stringify(profile));
+const loadProfile=()=>{try{const s=localStorage.getItem(LS_KEY);return s?JSON.parse(s):null;}catch(e){return null;}};
+const saveClients=()=>profile&&localStorage.setItem('hc_v6_'+profile.community,JSON.stringify(clientsHistory));
+const loadClients=()=>{try{const s=localStorage.getItem('hc_v6_'+(profile?.community||''));return s?JSON.parse(s):[];}catch(e){return[];}};
+
+function logout(){
+  if(profile)localStorage.removeItem('hc_v6_'+profile.community);
+  localStorage.removeItem(LS_KEY);
+  ['main-header','main-hero','main-trust','main-nav','main-layout'].forEach(id=>$(id).style.display='none');
+  $('ai-fab').style.display='none';$('contract-banner').style.display='none';$('login-screen').style.display='flex';
+  profile=null;clientsHistory=[];selectedModel=null;currentResult=null;loginPartnerType='rp';loginOrgName='';
+  $('login-community').value='';$('login-user-role').value='';$('login-password').value='';
+  goToLoginStep(1);
+  document.querySelectorAll('.lpt-option').forEach(o=>o.classList.remove('selected'));
+  document.querySelector('[data-type="rp"]').classList.add('selected');
+  $('user-dropdown').classList.remove('open');
+  AI_OPEN=false;$('ai-chat-panel').classList.remove('open');$('ai-chat-messages').innerHTML='';$('ai-suggestions').innerHTML='';
+}
+
+function makeDemoClients(){return[{id:1001,company:'Arcor S.A.',status:'implementacion',date:'Lunes 10/3',time:'10:00 hs',execName:PARTNER_EXECS[0],aeExecName:ACCOUNT_EXECS[0],acv:43200},{id:1002,company:'Mercado Libre',status:'cierre',date:'Martes 11/3',time:'11:00 hs',execName:PARTNER_EXECS[1],aeExecName:ACCOUNT_EXECS[1],acv:72000},{id:1003,company:'Banco Galicia',status:'negociacion',date:'Miércoles 12/3',time:'14:00 hs',execName:PARTNER_EXECS[2],aeExecName:ACCOUNT_EXECS[2],acv:54000},{id:1004,company:'OSDE',status:'demo',date:'Jueves 13/3',time:'15:00 hs',execName:PARTNER_EXECS[3],aeExecName:ACCOUNT_EXECS[3],acv:36000},{id:1005,company:'Farmacity',status:'verificacion',date:'Viernes 14/3',time:'16:00 hs',execName:PARTNER_EXECS[4],aeExecName:ACCOUNT_EXECS[4],acv:28800}];}
+
+function goToLoginStep(n){
+  const s1=$('login-step1'),s2=$('login-step2');
+  if(n===2){s1.classList.replace('visible','hidden');setTimeout(()=>s2.classList.replace('hidden','visible'),50);}
+  else{s2.classList.replace('visible','hidden');setTimeout(()=>s1.classList.replace('hidden','visible'),50);}
+}
+function finishLogin(orgName,activeUser,community){
+  const chipName=community||activeUser;
+  profile={community:chipName,orgName,activeUser,partnerType:loginPartnerType,contractSigned:false,joinDate:new Date().toLocaleDateString('es-AR'),level:'silver'};
+  saveProfile();clientsHistory=loadClients();if(!clientsHistory.length){clientsHistory=makeDemoClients();saveClients();}
+  bootApp();
+}
+
+function bootApp(){
+  $('login-screen').style.display='none';
+  ['main-header','main-hero','main-trust','main-nav'].forEach(id=>$(id).style.display='flex');
+  $('main-hero').style.display='block';$('main-trust').style.display='flex';$('main-layout').style.display='grid';
+  $('ai-fab').style.display='block';
+  selectedModel=profile.partnerType;
+  $('acc-'+selectedModel).classList.add('selected');$('badge-'+selectedModel).style.display='inline-block';
+  $('body-'+selectedModel).classList.add('open');$('chev-'+selectedModel).classList.add('open');
+  document.querySelectorAll('.step1-section').forEach(el=>el.style.display='none');
+  setStepState(1,'done');setStepState(2,'active');
+  if(profile.contractSigned){$('sign-success').style.display='flex';$('sign-btn').style.display='none';document.querySelectorAll('.step3-section').forEach(el=>el.style.display='none');setStepState(3,'done');setStepState(4,'active');}
+  updateHeaderUI();updateContractBanner();updateSidebarProfile();
+  setLang(currentLang);renderClients();renderOraclePortfolio();renderNotifs();showCertTab();
+}
+
+function updateHeaderUI(){
+  const T=LANGS[currentLang],level=getLevel(clientsHistory.length),lbl=getLevelLabel(level),emoji=getLevelEmoji(level);
+  profile.level=level;saveProfile();
+  $('chip-avatar').textContent=initials(profile.community);$('chip-name').textContent=profile.community;
+  const cb=$('chip-badge');cb.textContent=emoji+' '+lbl;cb.className='community-chip-badge badge-'+level;
+  $('user-avatar').textContent=initials(profile.activeUser||profile.community);
+  $('dd-community').textContent=profile.partnerType==='bp'?profile.orgName:profile.activeUser||profile.community;
+  $('dd-meta').textContent=profile.partnerType==='bp'?(profile.activeUser+' · '+T.bp_title):T.rp_title;
+  const dot=$('dd-status-dot'),lel=$('dd-status-label');
+  if(profile.contractSigned){dot.style.background='#15803D';lel.textContent=T.contract_status_signed;lel.style.color='#15803D';}
+  else{dot.style.background='#F97316';lel.textContent=T.contract_status_pending;lel.style.color='#C2410C';}
+  $('dd-contract-link').textContent=profile.contractSigned?T.contract_see:T.contract_pandadoc;
+  $('hero-welcome').innerHTML=T.hero_welcome+' <strong>'+profile.community+'</strong>';
+}
+function updateContractBanner(){
+  const T=LANGS[currentLang],banner=$('contract-banner');banner.style.display='flex';
+  if(profile.contractSigned){banner.className='contract-banner signed';$('cb-icon').textContent='✅';$('contract-banner-txt').textContent=T.contract_signed;$('cb-pandadoc').textContent=T.contract_see;}
+  else{banner.className='contract-banner pending';$('cb-icon').textContent='⚠️';$('contract-banner-txt').textContent=T.contract_pending;$('cb-pandadoc').textContent=T.contract_pandadoc;}
+  $('cb-pandadoc').onclick=()=>window.open('https://www.pandadoc.com','_blank');
+}
+function updateSidebarProfile(){
+  const T=LANGS[currentLang],level=profile.level||'silver';
+  $('psb-community').textContent=profile.community;$('psb-type').textContent=profile.partnerType==='rp'?T.rp_title:T.bp_title;
+  $('psb-contract').textContent=profile.contractSigned?T.contract_status_signed:T.contract_status_pending;
+  $('psb-date').textContent=profile.joinDate;
+  const psb=$('psb-badge');psb.className='psb-badge '+level;psb.textContent=getLevelEmoji(level)+' '+getLevelLabel(level);
+  const sbCard=$('sb-pipeline-card');
+  if(!clientsHistory.length){sbCard.style.display='none';return;}
+  sbCard.style.display='block';
+  const counts={};PIPELINE.forEach(s=>counts[s.key]=0);clientsHistory.forEach(c=>{if(counts[c.status]!==undefined)counts[c.status]++;});
+  $('sb-pipeline-list').innerHTML=PIPELINE.filter(s=>counts[s.key]>0).map(s=>`<div class="sb-pipeline-row"><div class="sb-pipeline-label"><span>${s.icon}</span>${s[currentLang]}</div><span class="sb-pipeline-count">${counts[s.key]}</span></div>`).join('');
+}
+
+function setLang(lang){
+  currentLang=lang;document.querySelectorAll('.lang-btn').forEach(b=>b.classList.toggle('active',b.id==='lang-'+lang));
+  const T=LANGS[lang];
+  const km={'t-companies':'t_companies','t-users':'t_users','t-countries':'t_countries','t-partners':'t_partners','step1-label':'step1_label','rp-title':'rp_title','rp-sub':'rp_sub','bp-title':'bp_title','bp-sub':'bp_sub','rp-comm':'rp_comm','bp-comm':'bp_comm','rp-commission-val':'rp_commission_val','bp-commission-val':'bp_commission_val','benefits-title':'benefits_title','modules-title':'modules_title','why-title':'why_title','why1':'why1','why2':'why2','why3':'why3','summary-title':'summary_title','step3-label':'step3_label','cta-title':'cta_title','cta-sub':'cta_sub','signed-msg':'signed_msg','perk1':'perk1','perk1-sub':'perk1_sub','perk2':'perk2','perk2-sub':'perk2_sub','perk3':'perk3','perk3-sub':'perk3_sub','perk4':'perk4','perk4-sub':'perk4_sub','step4-label':'step4_label','check-sub':'check_sub','crm-loading-text':'crm_loading','demo-confirmed':'demo_confirmed','hero-eyebrow':'hero_eyebrow','history-title':'history_title','rs1-lbl':'step_verify','rs2-lbl':'step_schedule','rs3-lbl':'step_done','footnote':'footnote'};
+  Object.keys(km).forEach(id=>{const el=$(id);if(el&&T[km[id]])el.innerHTML=T[km[id]];});
+  $('hero-title').innerHTML=T.hero_title;
+  const sel=$('industria'),cur=sel.value;
+  sel.innerHTML='<option value="">'+T.industry_placeholder+'</option>'+Object.entries(T.industries).map(([v,l])=>`<option value="${v}"${v===cur?' selected':''}>${l}</option>`).join('');
+  $('rp-list').innerHTML=T.rp_items.map(i=>`<li><span class="check">✓</span>${i}</li>`).join('');
+  $('bp-list').innerHTML=T.bp_items.map(i=>`<li><span class="check">✓</span>${i}</li>`).join('');
+  if(profile){updateHeaderUI();updateContractBanner();updateSidebarProfile();}
+  renderClients();if(currentResult)calcular(true);if(currentTab==='dashboard')renderDashboard();
+}
+
+function switchTab(tab){
+  currentTab=tab;
+  ['dashboard','partner','materiales','certificacion'].forEach(t=>{$('panel-'+t)?.classList.toggle('active',t===tab);$('tab-'+t)?.classList.toggle('active',t===tab);});
+  if(tab==='dashboard')renderDashboard();if(tab==='certificacion')renderCertFlow();
+}
+function showCertTab(){const t=$('tab-certificacion');if(t)t.style.display=profile?.partnerType==='bp'?'':'none';}
+
+function renderNotifs(){
+  const unread=NOTIFS.filter(n=>n.unread).length;
+  $('notif-badge').className='notif-badge'+(unread>0?' show':'');
+  $('notif-list').innerHTML=NOTIFS.map(n=>`<div class="notif-item${n.unread?' unread':''}"><div class="notif-icon-wrap ${n.iconCls}">${n.icon}</div><div class="notif-content"><div class="notif-text">${n.text}</div><div class="notif-time">${n.time}</div></div>${n.unread?'<div class="notif-dot"></div>':''}</div>`).join('');
+}
+function markNotifsRead(){NOTIFS.forEach(n=>n.unread=false);renderNotifs();}
+
+function selectModel(id){
+  const body=$('body-'+id),chev=$('chev-'+id);
+  if(selectedModel===id){body.classList.toggle('open');chev.classList.toggle('open');return;}
+  selectedModel=id;
+  ['rp','bp'].forEach(m=>{const acc=$('acc-'+m),b=$('body-'+m),c=$('chev-'+m),badge=$('badge-'+m);if(m===id){acc.classList.add('selected');b.classList.add('open');c.classList.add('open');badge.style.display='inline-block';}else{acc.classList.remove('selected');b.classList.remove('open');c.classList.remove('open');badge.style.display='none';}});
+  setStepState(1,'done');setStepState(2,'active');renderOraclePortfolio();if(currentResult)calcular(true);
+}
+
+function validateCalcFields(){
+  const T=LANGS[currentLang],ind=$('industria').value,emp=parseInt($('empleados').value);let ok=true;
+  ['industria','empleados'].forEach(id=>$(id).classList.remove('error'));['err-industria','err-empleados'].forEach(id=>$(id).classList.remove('show'));
+  if(!ind){$('industria').classList.add('error');$('err-industria').textContent=T.err_industry;$('err-industria').classList.add('show');ok=false;}
+  if(!emp||emp<1){$('empleados').classList.add('error');$('err-empleados').textContent=T.err_employees;$('err-empleados').classList.add('show');ok=false;}
+  return ok;
+}
+
+function calcular(silent=false){
+  const T=LANGS[currentLang];if(!selectedModel)return;if(!silent&&!validateCalcFields())return;
+  const ind=$('industria').value,emp=parseInt($('empleados').value);if(!ind||!emp||emp<1)return;
+  const model=MODELS[selectedModel],ppu=getPPU(emp),monthly=ppu*emp,annual=monthly*12;
+  const com1=annual*model.rate1,comMonthly=monthly*model.rate1,com2=annual*model.rateRecurring,comMonthly2=monthly*model.rateRecurring;
+  const indData=IND[ind],langData=indData[currentLang],size=getSizeLabel(emp),modelLabel=T[selectedModel==='rp'?'rp_title':'bp_title'];
+  currentResult={ind,emp,ppu,monthly,annual,com1,comMonthly,langData,indData,size,model,modelLabel};
+  const yearsHTML=model.rateRecurring
+    ?`<div class="ch-years"><div class="ch-year"><div class="ch-year-label">${T.year1}</div><div class="ch-year-amount"><span class="counter-val" data-target="${com1}">${fmtUSD(0)}</span></div><div class="ch-year-monthly">${fmtUSD(comMonthly)}/mes</div></div><div class="ch-year"><div class="ch-year-badge">recurrente</div><div class="ch-year-label">${T.year2}</div><div class="ch-year-amount dim"><span class="counter-val" data-target="${com2}">${fmtUSD(0)}</span></div><div class="ch-year-monthly">${fmtUSD(comMonthly2)}/mes</div></div></div>`
+    :`<div class="ch-years ch-year-single"><div class="ch-year"><div class="ch-year-label">${T.year1}</div><div class="ch-year-amount"><span class="counter-val" data-target="${com1}">${fmtUSD(0)}</span></div><div class="ch-year-monthly">${fmtUSD(comMonthly)}/mes</div></div></div>`;
+  $('oracle-commission-hero').innerHTML=`<div class="oracle-commission-hero"><div class="ch-top"><span class="ch-model-tag">${modelLabel}</span><span class="ch-sub">${emp} empl. · ${T.industries[ind]} · USD ${ppu}/emp/mes</span></div>${yearsHTML}</div>`;
+  setTimeout(()=>{document.querySelectorAll('.counter-val').forEach(el=>{const t=parseFloat(el.dataset.target);if(!isNaN(t))animateCounter(el,t);});},50);
+  $('oracle-metrics-grid').innerHTML=`<div class="oracle-metric"><div class="m-label">👥 Empleados</div><div class="m-val">${emp}</div><div class="m-sub">${size}</div></div><div class="oracle-metric"><div class="m-label">💵 USD/emp</div><div class="m-val accent">${ppu}</div><div class="m-sub">mensual</div></div><div class="oracle-metric"><div class="m-label">📅 ${T.monthly_label}</div><div class="m-val">${fmtUSD(monthly)}</div></div><div class="oracle-metric"><div class="m-label">📊 ACV</div><div class="m-val accent">${fmtUSD(annual)}</div></div>`;
+  $('beneficios-list').innerHTML=langData.beneficios.map(b=>`<div class="benefit-item"><span class="bchev" style="color:#C4B5FD;">›</span><span class="btext" style="color:rgba(255,255,255,0.75);">${b}</span></div>`).join('');
+  $('modulos-list').innerHTML=indData.modulos.map(m=>`<span class="oracle-module-pill">${m}</span>`).join('');
+  const c=langData.caso;
+  $('caso-exito-card').innerHTML=`<div class="section-label" style="color:rgba(196,181,253,0.7);">${T.case_title} · ${T.industries[ind]}</div><div class="oracle-case-inner"><div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;"><div style="font-size:20px;">${indData.emoji}</div><div><div class="oracle-case-company">${c.empresa}</div><div class="oracle-case-ind">${T.industries[ind]}</div></div></div><div class="oracle-case-quote">${c.cita}</div><div style="display:flex;gap:16px;flex-wrap:wrap;">${c.metricas.map(m=>`<div class="oracle-case-metric"><div class="cv">${m.val}</div><div class="cl">${m.lbl}</div></div>`).join('')}</div></div>`;
+  $('summary-box').textContent=buildSummary(currentResult);
+  setStepState(2,'done');setStepState(3,profile.contractSigned?'done':'active');
+  const res=$('oracle-results');res.style.display='block';requestAnimationFrame(()=>res.classList.add('show'));
+  $('clear-calc-btn').style.display='';
+  if(!silent)setTimeout(()=>res.scrollIntoView({behavior:'smooth',block:'start'}),80);
+  oracleRows[0]={id:oracleRows[0].id,industry:ind,employees:emp};renderOraclePortfolio();
+  if(currentTab==='dashboard')renderDashboard();
+}
+
+function buildSummary(r){
+  const T=LANGS[currentLang],ind=$('industria').value;
+  return['🚀 Humand — Propuesta de valor','','📋 Industria: '+T.industries[ind],'👥 Empleados: '+r.emp+' ('+r.size+')','','💵 USD '+r.ppu+'/emp/mes | '+fmtUSD(r.monthly)+'/mes | '+fmtUSD(r.annual)+'/año',''].concat(r.langData.beneficios.map(b=>'  ✅ '+b)).concat(['','📦 '+r.indData.modulos.join(', '),'','💬 "'+r.langData.caso.cita+'"','  — '+r.langData.caso.empresa]).join('\n');
+}
+
+function togglePortfolio(){portfolioOpen=!portfolioOpen;$('oracle-portfolio-body').classList.toggle('open',portfolioOpen);$('portfolio-chevron').classList.toggle('open',portfolioOpen);}
+
+function renderOraclePortfolio(){
+  const T=LANGS[currentLang],model=MODELS[selectedModel]||MODELS.rp;
+  $('oracle-rows').innerHTML=oracleRows.map(r=>{
+    const a1=selectedModel?getPCO(r.employees):0,isBP=selectedModel==='bp',a2=isBP?getPPU(r.employees)*r.employees*12*model.rateRecurring:0;
+    const vals=selectedModel?`<div style="text-align:right;min-width:68px;"><div class="or-val-label">${T.year1}</div><div class="or-val-num">${fmtUSD(a1)}</div></div>${isBP?`<div style="text-align:right;min-width:68px;"><div class="or-val-label">${T.year2}</div><div class="or-val-num or-val-y2">${fmtUSD(a2)}</div></div>`:''}`:`<div style="font-size:11px;color:rgba(196,181,253,0.35);">Seleccioná modelo</div>`;
+    return `<div class="portfolio-row"><div class="field" style="flex:2;min-width:90px;"><select onchange="updateOR(${r.id},'industry',this.value)">${Object.entries(T.industries).map(([v,l])=>`<option value="${v}"${v===r.industry?' selected':''}>${l}</option>`).join('')}</select></div><div class="field" style="flex:1;max-width:75px;"><input type="number" value="${r.employees}" min="1" onchange="updateOR(${r.id},'employees',Math.max(1,parseInt(this.value)||1))"/></div><div style="display:flex;gap:6px;align-items:center;">${vals}</div><button class="btn-icon" onclick="removeOR(${r.id})">✕</button></div>`;
+  }).join('');
+  const totEl=$('oracle-total');
+  if(!selectedModel){totEl.style.display='none';totEl.classList.remove('visible');return;}
+  const tot=oracleRows.reduce((s,r)=>s+getPCO(r.employees),0);
+  const totR=model.rateRecurring?oracleRows.reduce((s,r)=>s+getPPU(r.employees)*r.employees*12*model.rateRecurring,0):0;
+  totEl.style.display='flex';totEl.classList.add('visible');
+  $('oracle-total-label').textContent=LANGS[currentLang].oracle_year1;animateCounter($('oracle-total-val'),tot);$('oracle-total-sub').textContent=fmtUSD(tot/12)+'/mes';
+  const y2b=$('oracle-year2-block');
+  if(model.rateRecurring){y2b.style.display='flex';$('oracle-year2-label').textContent=LANGS[currentLang].oracle_year2;$('oracle-year2-val').textContent=fmtUSD(totR);$('oracle-year2-sub').textContent=fmtUSD(totR/12)+'/mes';}
+  else y2b.style.display='none';
+}
+function addOR(){oracleRows.push({id:oracleCounter++,industry:'tecnologia',employees:200});renderOraclePortfolio();}
+function removeOR(id){if(oracleRows.length>1){oracleRows=oracleRows.filter(r=>r.id!==id);renderOraclePortfolio();}}
+function updateOR(id,f,v){oracleRows=oracleRows.map(r=>r.id===id?{...r,[f]:v}:r);renderOraclePortfolio();}
+
+function setRegStep(n){
+  [1,2,3].forEach(i=>{const s=$('rs'+i),dot=$('rs'+i+'-dot');s.className='reg-step'+(i===n?' active':i<n?' done':'');dot.textContent=i<n?'✓':i;if(i<3)$('rsl'+i).className='reg-step-line'+(i<n?' done':'');$('reg-p'+i).className='reg-panel'+(i===n?' active':'');});
+}
+function checkHubspot(){
+  const T=LANGS[currentLang],company=$('hs-company').value.trim();if(!company)return;
+  const loadEl=$('hs-loading'),resultEl=$('crm-result');resultEl.innerHTML='';loadEl.style.display='flex';
+  setTimeout(()=>{
+    loadEl.style.display='none';const avail=Math.random()<0.5;
+    resultEl.innerHTML=avail
+      ?`<div class="crm-result-box available"><div class="crm-result-header"><div class="crm-dot dot-green"></div><div class="crm-status-label" style="color:var(--c-green);">${T.hs_available}</div></div><div class="crm-msg"><strong>${company}</strong> — ${T.hs_available_msg}</div><button class="btn btn-primary" onclick="goToDemo('${company.replace(/'/g,"\\'")}') " style="width:100%;justify-content:center;margin-top:10px;">${T.step_schedule} →</button></div>`
+      :`<div class="crm-result-box review"><div class="crm-result-header"><div class="crm-dot dot-orange"></div><div class="crm-status-label" style="color:#C2410C;">${T.hs_review}</div></div><div class="crm-msg"><strong>${company}</strong> — ${T.hs_review_msg}</div></div>`;
+    currentCRMResult={company,available:avail};setStepState(4,'active');
+  },1400);
+}
+function goToDemo(company){currentCRMResult={company,available:true};$('demo-company-name').textContent=company;setRegStep(2);}
+function agendarDemo(){
+  const T=LANGS[currentLang],btn=$('demo-btn');btn.disabled=true;$('demo-loading').style.display='flex';
+  setTimeout(()=>{
+    $('demo-loading').style.display='none';
+    const days={es:['Lunes','Martes','Miércoles','Jueves','Viernes'],en:['Monday','Tuesday','Wednesday','Thursday','Friday'],pt:['Segunda','Terça','Quarta','Quinta','Sexta']};
+    const d=new Date();d.setDate(d.getDate()+Math.floor(Math.random()*3)+1);
+    const dateStr=days[currentLang][d.getDay()%5]+' '+d.getDate()+'/'+(d.getMonth()+1);
+    const timeStr=['10:00','11:00','14:00','15:00','16:00'][Math.floor(Math.random()*5)]+' hs';
+    const execName=PARTNER_EXECS[Math.floor(Math.random()*PARTNER_EXECS.length)];
+    const aeExecName=ACCOUNT_EXECS[Math.floor(Math.random()*ACCOUNT_EXECS.length)];
+    $('demo-date').textContent=dateStr;$('demo-time').textContent=timeStr;$('demo-exec-note').textContent=execName+' te acompañará en la demo.';
+    const entry={id:Date.now(),company:currentCRMResult.company,status:'demo',date:dateStr,time:timeStr,execName,aeExecName,acv:AVG_PPU*AVG_EMP*12};
+    clientsHistory.unshift(entry);saveClients();profile.level=getLevel(clientsHistory.length);saveProfile();
+    updateHeaderUI();updateSidebarProfile();renderClients();
+    $('clients-so-far').textContent=T.new_client_txt.replace('{n}',clientsHistory.length);
+    setRegStep(3);setStepState(4,'done');btn.disabled=false;
+  },1400);
+}
+function resetRegFlow(){$('hs-company').value='';$('crm-result').innerHTML='';$('hs-loading').style.display='none';currentCRMResult=null;setRegStep(1);}
+function copyDemoInfo(){
+  const date=$('demo-date').textContent,time=$('demo-time').textContent,company=currentCRMResult?.company||'';
+  navigator.clipboard.writeText(`📅 Demo Humand\n🏢 ${company}\n📆 ${date}\n🕐 ${time}`).then(()=>{const fb=$('copy-demo-feedback');fb.textContent=LANGS[currentLang].copied;fb.classList.add('show');setTimeout(()=>fb.classList.remove('show'),2000);});
+}
+function firmarAcuerdo(){
+  const btn=$('sign-btn');btn.disabled=true;btn.innerHTML='⏳ Procesando...';
+  setTimeout(()=>{
+    profile.contractSigned=true;saveProfile();updateHeaderUI();updateContractBanner();updateSidebarProfile();
+    btn.style.display='none';$('sign-success').style.display='flex';setStepState(3,'done');setStepState(4,'active');
+    setTimeout(()=>{document.querySelectorAll('.step3-section').forEach(el=>{el.style.transition='opacity .35s';el.style.opacity='0';setTimeout(()=>el.style.display='none',350);});},2000);
+  },1500);
+}
+function toggleSummary(){const b=$('summary-body'),c=$('summary-chevron');const o=b.style.display!=='none';b.style.display=o?'none':'block';c.classList.toggle('open',!o);}
+function copySummary(){navigator.clipboard.writeText($('summary-box').textContent).then(()=>{const fb=$('copy-feedback');fb.classList.add('show');setTimeout(()=>fb.classList.remove('show'),2000);});}
+function shareWhatsApp(){window.open('https://wa.me/?text='+encodeURIComponent($('summary-box').textContent),'_blank');}
+
+function renderClients(){
+  const secEl=$('clients-section'),divEl=$('tracker-divider');
+  if(!clientsHistory.length){secEl.style.display='none';divEl.style.display='none';return;}
+  secEl.style.display='block';divEl.style.display='flex';
+  $('clients-list').innerHTML=clientsHistory.map(c=>{
+    const si=stageIdx(c.status);
+    const barSegs=PIPELINE.map((s,i)=>`<div class="pb-seg ${i<si?'done':i===si?'active':''}"></div>`).join('');
+    return `<div class="client-card" onclick="openDrawer(${c.id})"><div class="client-card-top"><div class="client-card-icon">🏢</div><div class="client-card-info"><div class="client-card-name">${c.company}</div><div class="client-card-meta">${c.date} · ${c.execName}</div></div><div class="client-card-right"><span class="client-status-badge ${stageCls(c.status)}">${stageIcon(c.status)} ${stageLabel(c.status)}</span></div></div><div class="pipeline-bar">${barSegs}</div><div class="hs-sync-badge"><div class="hs-sync-dot"></div> Sync HubSpot</div></div>`;
+  }).join('');
+  updateSidebarProfile();
+}
+function openDrawer(id){
+  const client=clientsHistory.find(c=>c.id===id);if(!client)return;
+  drawerClientId=id;$('drawer-title').textContent=client.company;$('drawer-meta').textContent=stageLabel(client.status)+' · '+client.date;
+  const si=stageIdx(client.status);
+  $('drawer-pipeline').innerHTML=PIPELINE.map((s,i)=>{const cls=i<si?'done':i===si?'active':'';return `<div class="dp-step"><div class="dp-left"><div class="dp-dot ${cls}">${i<si?'✓':stageIcon(s.key)}</div><div class="dp-line ${cls}"></div></div><div class="dp-content"><div class="dp-name ${cls}">${s[currentLang]}</div></div></div>`;}).join('');
+  $('drawer-exec-avatar').textContent=(client.execName||PARTNER_EXECS[0]).charAt(0).toUpperCase();$('drawer-exec-name').textContent=client.execName||PARTNER_EXECS[0];
+  $('drawer-ae-avatar').textContent=(client.aeExecName||ACCOUNT_EXECS[0]).charAt(0).toUpperCase();$('drawer-ae-name').textContent=client.aeExecName||ACCOUNT_EXECS[0];
+  $('drawer-overlay').classList.add('open');requestAnimationFrame(()=>$('drawer').classList.add('open'));
+}
+function closeDrawer(){$('drawer').classList.remove('open');$('drawer-overlay').classList.remove('open');drawerClientId=null;}
+
+function renderDashboard(){
+  const isBP=profile?.partnerType==='bp';
+  const cerrados=clientsHistory.filter(c=>c.status==='cierre'||c.status==='implementacion');
+  const enNeg=clientsHistory.filter(c=>c.status==='negociacion');
+  const acumulado=cerrados.reduce((s,c)=>s+clientComY1(c),0);
+  const proyectado=enNeg.reduce((s,c)=>s+clientComY1(c),0);
+  const proximoPago=acumulado*0.3;const recurrencia=cerrados.reduce((s,c)=>s+clientComRec(c),0);
+  const now=new Date(),nextPay=new Date(now.getFullYear(),now.getMonth()+1,1);
+  const months=['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+  const monthsFull=['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+  animateCounter($('dash-acumulado'),acumulado);animateCounter($('dash-proyectado'),proyectado);animateCounter($('dash-proximo-val'),proximoPago);animateCounter($('dash-pay-amount'),proximoPago);
+  $('dash-proximo-fecha').textContent='Est. 1 '+months[nextPay.getMonth()];$('dash-pay-date').textContent='1 de '+monthsFull[nextPay.getMonth()]+' '+nextPay.getFullYear();$('dash-period').textContent=now.getFullYear();
+  const bkSec=$('dash-breakdown-section');
+  if(isBP){bkSec.style.display='block';animateCounter($('dash-bk-y1'),acumulado);animateCounter($('dash-bk-rec'),recurrencia);$('chart-legend-y2').style.display='flex';}
+  else{bkSec.style.display='none';$('chart-legend-y2').style.display='none';}
+  renderChart(acumulado,proyectado,recurrencia,isBP);
+}
+function renderChart(acumulado,proyectado,recurrencia,isBP){
+  const wrap=$('dash-chart-wrap'),MONTHS=['E','F','M','A','M','J','J','A','S','O','N','D'];
+  const curM=new Date().getMonth();const bars=[];
+  for(let i=0;i<12;i++){const m=(curM+i)%12;const y1=acumulado+(proyectado/6*Math.min(i,6));const y2=isBP?recurrencia/12*(i+1):0;bars.push({label:MONTHS[m],y1,y2,total:y1+y2});}
+  const maxVal=Math.max(...bars.map(b=>b.total||1));
+  wrap.querySelectorAll('.dash-bar-group').forEach(el=>el.remove());
+  bars.forEach((b)=>{
+    const p1=Math.max(4,(b.y1/maxVal)*100),p2=isBP?Math.max(2,(b.y2/maxVal)*100):0;
+    const g=document.createElement('div');g.className='dash-bar-group';
+    g.innerHTML=`<div class="dash-bar-tooltip">${fmtUSD(b.total)}</div><div class="dash-bar-container"><div class="dash-bar y1" style="height:0%" data-h="${p1}%"></div>${isBP?`<div class="dash-bar y2" style="height:0%" data-h="${p2}%"></div>`:''}</div><span class="dash-bar-label">${b.label}</span>`;
+    wrap.appendChild(g);
+  });
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{wrap.querySelectorAll('.dash-bar').forEach((bar,i)=>{bar.style.transitionDelay=(i*40)+'ms';bar.style.height=bar.dataset.h;});}));
+}
+
+function certPct(){return Math.round([certState.feePaid,certState.salesTrackDone,certState.adminTrackDone,certState.independenceDone].filter(Boolean).length/4*100);}
+function renderCertFlow(){
+  const root=$('cert-flow-root');if(!root)return;const pct=certPct(),allDone=pct===100;
+  const P={navy:'#1E3A8A',navyBg:'#EEF4FF',navyBd:'#BFDBFE',green:'#15803D',greenBg:'#F0FDF4',greenBd:'#86EFAC',slate:'#475569',slateLight:'#F8FAFC',slateBd:'#E2E8F0',text:'#1E293B',muted:'#64748B'};
+  const items=[{key:'fee',label:'Fee de Activación',detail:'USD 1,000 · pago único anual',done:certState.feePaid,action:!certState.feePaid?`<button onclick="certPayFee()" style="height:30px;padding:0 14px;background:#1E3A8A;color:white;border:none;border-radius:6px;font-size:11px;font-weight:700;font-family:'Inter',sans-serif;cursor:pointer;">Pagar ahora</button>`:`<span style="font-size:11px;font-weight:600;color:${P.green};">Pagado</span>`},{key:'sales',label:'Capacitación Comercial',detail:'Sales Track · 5 semanas',done:certState.salesTrackDone,locked:!certState.feePaid,action:certState.salesTrackDone?`<button onclick="showCertModal('sales')" style="height:30px;padding:0 12px;background:${P.greenBg};color:${P.green};border:1px solid ${P.greenBd};border-radius:6px;font-size:11px;font-weight:700;font-family:'Inter',sans-serif;cursor:pointer;">✓ Completado</button>`:!certState.feePaid?`<span style="font-size:11px;color:${P.muted};">Requiere fee</span>`:`<button onclick="certCompleteTrack('sales')" style="height:30px;padding:0 12px;background:${P.slateLight};color:${P.navy};border:1px solid ${P.navyBd};border-radius:6px;font-size:11px;font-weight:700;font-family:'Inter',sans-serif;cursor:pointer;">📋 Ver etapas</button>`},{key:'admin',label:'Capacitación Técnica',detail:'Admin Track · 8 semanas',done:certState.adminTrackDone,locked:!certState.feePaid,action:certState.adminTrackDone?`<button onclick="showCertModal('admin')" style="height:30px;padding:0 12px;background:${P.greenBg};color:${P.green};border:1px solid ${P.greenBd};border-radius:6px;font-size:11px;font-weight:700;font-family:'Inter',sans-serif;cursor:pointer;">✓ Completado</button>`:!certState.feePaid?`<span style="font-size:11px;color:${P.muted};">Requiere fee</span>`:`<button onclick="certCompleteTrack('admin')" style="height:30px;padding:0 12px;background:${P.slateLight};color:${P.navy};border:1px solid ${P.navyBd};border-radius:6px;font-size:11px;font-weight:700;font-family:'Inter',sans-serif;cursor:pointer;">📋 Ver etapas</button>`},{key:'path',label:'Validación de Autonomía',detail:'Ruta de independencia · 5 clientes',done:certState.independenceDone,locked:!(certState.salesTrackDone&&certState.adminTrackDone),action:certState.independenceDone?`<span style="font-size:11px;font-weight:600;color:${P.green};">Confirmado</span>`:!(certState.salesTrackDone&&certState.adminTrackDone)?`<span style="font-size:11px;color:${P.muted};">Requiere certificaciones</span>`:`<button onclick="certCompletePath()" style="height:30px;padding:0 14px;background:${P.slateLight};color:${P.navy};border:1px solid ${P.navyBd};border-radius:6px;font-size:11px;font-weight:700;font-family:'Inter',sans-serif;cursor:pointer;">Confirmar</button>`}];
+  const rows=items.map((item,i)=>{const isLast=i===items.length-1;const checkColor=item.done?P.green:item.locked?P.muted:P.navy;const checkBg=item.done?P.greenBg:item.locked?P.slateLight:P.navyBg;const checkBd=item.done?P.greenBd:item.locked?P.slateBd:P.navyBd;const checkIcon=item.done?'✓':(i+1).toString();return `<div style="display:flex;align-items:center;gap:14px;padding:13px 0;${!isLast?'border-bottom:1px solid '+P.slateBd+';':''}opacity:${item.locked&&!item.done?'0.5':'1'};"><div style="width:26px;height:26px;border-radius:50%;background:${checkBg};border:1.5px solid ${checkBd};display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;color:${checkColor};flex-shrink:0;">${checkIcon}</div><div style="flex:1;min-width:0;"><div style="font-size:13px;font-weight:600;color:${item.locked&&!item.done?P.muted:P.text};">${item.label}</div><div style="font-size:11px;color:${P.muted};margin-top:1px;font-weight:500;">${item.detail}</div></div><div style="flex-shrink:0;">${item.action}</div></div>`;}).join('');
+  root.innerHTML=`<div style="background:#fff;border:1px solid ${P.slateBd};border-radius:12px;box-shadow:0 1px 3px rgba(0,0,0,0.05);overflow:hidden;"><div style="padding:16px 20px;border-bottom:1px solid ${P.slateBd};display:flex;align-items:center;justify-content:space-between;gap:12px;"><div><div style="font-size:13px;font-weight:700;color:${P.text};">Estatus de Certificación BP</div><div style="font-size:11px;color:${P.muted};margin-top:2px;font-weight:500;">${allDone?'Activación completada · Partner Gold activo':'Completá los pasos para activar el programa'}</div></div><div style="text-align:right;flex-shrink:0;"><div style="font-size:20px;font-weight:900;color:${allDone?P.green:P.navy};">${pct}%</div><div style="font-size:10px;color:${P.muted};font-weight:500;">completado</div></div></div><div style="height:3px;background:${P.slateBd};"><div style="height:100%;width:${pct}%;background:${allDone?P.green:P.navy};transition:width .6s ease;"></div></div><div style="padding:0 20px;">${rows}</div>${allDone?`<div style="padding:14px 20px;border-top:1px solid ${P.slateBd};background:${P.greenBg};display:flex;align-items:center;gap:10px;"><span style="font-size:13px;font-weight:700;color:${P.green};">Partner Gold activado</span><span style="font-size:11px;color:${P.green};opacity:0.7;">· Comisiones recurrentes habilitadas</span></div>`:`<div style="padding:12px 20px;border-top:1px solid ${P.slateBd};background:${P.slateLight};"><div style="font-size:10px;color:${P.muted};font-weight:500;">Los pasos se desbloquean en orden. El fee activa las capacitaciones.</div></div>`}</div>`;
+}
+function certPayFee(){event.target.disabled=true;event.target.textContent='Procesando...';event.target.style.opacity='0.6';setTimeout(()=>{certState.feePaid=true;renderCertFlow();},1400);}
+function certCompleteTrack(key){
+  // Show modal first, then allow marking complete
+  showCertModal(key);
+}
+function certMarkDone(key){
+  if(key==='sales')certState.salesTrackDone=true;else certState.adminTrackDone=true;
+  closeCertModal();renderCertFlow();
+}
+function showCertModal(key){
+  const isSales=key==='sales';
+  const stages=isSales?[
+    {icon:'👀',title:'Shadowing',range:'5 – 10 leads',desc:'El Business Partner <strong>acompaña</strong> al equipo comercial de Humand en demos y negociaciones. Observás y aprendés el proceso de venta consultiva.',color:'#EEF4FF',bd:'#BFDBFE',tc:'#1E3A8A'},
+    {icon:'🤝',title:'Guided Independence',range:'11 – 15 leads',desc:'El Business Partner <strong>lidera</strong> el proceso comercial con <strong>apoyo</strong> del equipo de Humand. Ya tomás la delantera en demos y seguimiento.',color:'#E0F2FE',bd:'#BAE6FD',tc:'#0369A1'},
+    {icon:'🚀',title:'Independent Execution',range:'16 – 20 leads',desc:'El Business Partner <strong>lidera</strong> el proceso comercial con apoyo <strong>eventual</strong> del equipo de Humand.',color:'#F5F3FF',bd:'#DDD6FE',tc:'#7C3AED'},
+    {icon:'⭐',title:'Full Independent Execution',range:'21 o más leads',desc:'El Business Partner <strong>recibe traspaso</strong> de los procesos comerciales o clientes que estuvieron en shadowing. Operación 100% autónoma.',color:'#FFFBEB',bd:'#FCD34D',tc:'#B45309'}
+  ]:[
+    {icon:'👀',title:'Shadowing',range:'1er y 2do cliente',desc:'El Business Partner <strong>acompaña</strong> al equipo de implementación de Humand. Observás la metodología, configuración y proceso completo de onboarding.',color:'#EEF4FF',bd:'#BFDBFE',tc:'#1E3A8A'},
+    {icon:'🤝',title:'Guided Independence',range:'3er y 4to cliente',desc:'El Business Partner <strong>lidera</strong> la implementación con <strong>apoyo</strong> del equipo de Humand. Tomás decisiones técnicas y gestionás el onboarding.',color:'#E0F2FE',bd:'#BAE6FD',tc:'#0369A1'},
+    {icon:'🚀',title:'Independent Execution',range:'5to y 6to cliente',desc:'El Business Partner implementa de forma autónoma. El equipo de Humand interviene solo como soporte eventual para clientes de mayor complejidad.',color:'#F5F3FF',bd:'#DDD6FE',tc:'#7C3AED'},
+    {icon:'⭐',title:'Full Independent Execution',range:'+7 clientes',desc:'El Business Partner <strong>recibe traspaso</strong> de implementaciones que estuvieron en shadowing. Operación técnica 100% autónoma sin acompañamiento.',color:'#FFFBEB',bd:'#FCD34D',tc:'#B45309'}
+  ];
+  const title=isSales?'📈 Capacitación Comercial — Etapas BP':'🛠️ Capacitación Técnica — Etapas BP';
+  const sub=isSales?'Sales Track · 5 semanas · Pipeline Sales':'Admin Track · 8 semanas · Implementaciones';
+  const note=isSales
+    ?'*Para pasar a Guided Independence y siguientes etapas se necesita tener <strong>ambos certificados</strong>.'
+    :'**Para clientes mayores a 3,000 colaboradores el equipo de Humand participará en la implementación.';
+
+  const stagesHTML=stages.map((s,i)=>`
+    <div style="display:flex;gap:16px;padding:16px 0;${i<stages.length-1?'border-bottom:1px solid #E2E8F0;':''}">
+      <div style="flex-shrink:0;display:flex;flex-direction:column;align-items:center;">
+        <div style="width:44px;height:44px;border-radius:50%;background:${s.color};border:2px solid ${s.bd};display:flex;align-items:center;justify-content:center;font-size:20px;">${s.icon}</div>
+        ${i<stages.length-1?`<div style="width:2px;flex:1;min-height:20px;background:#E2E8F0;margin:6px 0;"></div>`:''}
+      </div>
+      <div style="flex:1;padding-top:4px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:6px;">
+          <div style="font-size:14px;font-weight:700;color:#1E293B;">${s.title}</div>
+          <div style="background:${s.color};border:1px solid ${s.bd};border-radius:20px;padding:4px 14px;font-size:12px;font-weight:800;color:${s.tc};">${s.range}</div>
+        </div>
+        <div style="font-size:12px;color:#475569;line-height:1.6;">${s.desc}</div>
+      </div>
+    </div>`).join('');
+
+  const isDone=isSales?certState.salesTrackDone:certState.adminTrackDone;
+  const actionBtn=isDone
+    ?`<div style="display:flex;align-items:center;gap:8px;background:#F0FDF4;border:1px solid #86EFAC;border-radius:8px;padding:10px 16px;"><span style="font-size:15px;">✅</span><span style="font-size:13px;font-weight:700;color:#15803D;">Capacitación completada</span></div>`
+    :`<button onclick="certMarkDone('${key}')" style="width:100%;height:44px;background:linear-gradient(135deg,#1E3A8A,#2E4BC6);color:white;border:none;border-radius:10px;font-size:14px;font-weight:700;font-family:'Inter',sans-serif;cursor:pointer;transition:opacity .2s;" onmouseover="this.style.opacity='.88'" onmouseout="this.style.opacity='1'">✓ Marcar como completado</button>`;
+
+  const modal=document.createElement('div');
+  modal.id='cert-track-modal';
+  modal.style.cssText='position:fixed;inset:0;z-index:4000;background:rgba(0,0,0,0.45);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;padding:16px;animation:fadeIn .2s ease;';
+  modal.innerHTML=`
+    <div style="background:#fff;border-radius:20px;width:100%;max-width:540px;max-height:90vh;display:flex;flex-direction:column;box-shadow:0 24px 64px rgba(0,0,0,0.22);overflow:hidden;">
+      <div style="background:linear-gradient(135deg,#1E3A8A,#2E4BC6);padding:20px 22px;display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-shrink:0;">
+        <div>
+          <div style="font-size:15px;font-weight:800;color:white;margin-bottom:4px;">${title}</div>
+          <div style="font-size:11px;color:rgba(255,255,255,0.55);">${sub}</div>
+        </div>
+        <button onclick="closeCertModal()" style="background:rgba(255,255,255,0.15);border:none;width:32px;height:32px;border-radius:8px;cursor:pointer;color:white;font-size:15px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:'Inter',sans-serif;">✕</button>
+      </div>
+      <div style="flex:1;overflow-y:auto;padding:4px 22px 16px;">
+        <div style="background:#F8FAFC;border-radius:10px;padding:12px 14px;margin:14px 0 4px;display:flex;align-items:center;gap:10px;border:1px solid #E2E8F0;">
+          <span style="font-size:18px;">${isSales?'🎯':'🛠️'}</span>
+          <div>
+            <div style="font-size:12px;font-weight:700;color:#1E293B;">Etapa Business Partner</div>
+            <div style="font-size:11px;color:#64748B;margin-top:1px;">Progresás automáticamente según tu actividad</div>
+          </div>
+        </div>
+        ${stagesHTML}
+      </div>
+      <div style="padding:14px 22px;border-top:1px solid #E2E8F0;background:#F8FAFC;flex-shrink:0;display:flex;flex-direction:column;gap:10px;">
+        ${actionBtn}
+        <div style="font-size:10px;color:#94A3B8;line-height:1.6;">${note}</div>
+      </div>
+    </div>`;
+  modal.addEventListener('click',e=>{if(e.target===modal)closeCertModal();});
+  document.body.appendChild(modal);
+}
+function closeCertModal(){const m=document.getElementById('cert-track-modal');if(m)m.remove();}
+function certCompletePath(){event.target.disabled=true;event.target.textContent='Guardando...';event.target.style.opacity='0.6';setTimeout(()=>{certState.independenceDone=true;renderCertFlow();},1000);}
+
+// AI CHAT
+function aiAddMsg(html,role,showPE=false){
+  const msgs=$('ai-chat-messages');
+  const wrap=document.createElement('div');wrap.className='ai-msg '+role;
+  wrap.innerHTML=`<div class="ai-bubble">${html}</div><div class="ai-msg-time">${nowTime()}</div>`;
+  if(showPE){const btn=document.createElement('button');btn.className='ai-pe-btn';btn.innerHTML='👤 Contactar a mi Partner Executive';btn.onclick=()=>window.open('https://wa.me/?text='+encodeURIComponent('Hola, soy partner de Humand y necesito ayuda.'),'_blank');wrap.appendChild(btn);}
+  msgs.appendChild(wrap);msgs.scrollTop=msgs.scrollHeight;
+}
+function aiShowTyping(){
+  const msgs=$('ai-chat-messages');
+  const t=document.createElement('div');t.id='ai-typing-indicator';t.className='ai-typing-bubble';
+  t.innerHTML='<div class="ai-typing-dot"></div><div class="ai-typing-dot"></div><div class="ai-typing-dot"></div>';
+  msgs.appendChild(t);msgs.scrollTop=msgs.scrollHeight;
+}
+function aiHideTyping(){const t=$('ai-typing-indicator');if(t)t.remove();}
+function aiSetSugg(list){$('ai-suggestions').innerHTML=list.map(s=>`<button class="ai-sugg-chip" onclick="aiSend(this.textContent)">${s}</button>`).join('');}
+function aiSend(text){
+  const msg=(text||$('ai-chat-input').value).trim();if(!msg)return;
+  $('ai-chat-input').value='';$('ai-suggestions').innerHTML='';
+  aiAddMsg(msg,'user');aiShowTyping();
+  setTimeout(()=>{
+    aiHideTyping();
+    const ans=aiFind(msg);
+    if(ans){aiAddMsg(ans,'bot');aiSetSugg(aiGetSugg(false).filter(s=>s!==msg).slice(0,3));}
+    else{
+      const temas=(profile?.partnerType==='bp')
+        ?'› Modelos de venta y márgenes<br>› SLA y horas por cliente<br>› Certificaciones requeridas<br>› Requisitos de activación'
+        :'› Comisiones y proceso de venta<br>› Herramientas y materiales disponibles<br>› Casos de éxito por industria<br>› Cómo registrar un cliente';
+      aiAddMsg(`No encontré info exacta sobre eso. 🤔<br><br>Podés preguntarme sobre:<br>${temas}`,  'bot',true);
+      aiSetSugg(aiGetSugg(true).slice(0,3));
+    }
+  },900+Math.random()*500);
+}
+function toggleAIChat(){
+  AI_OPEN=!AI_OPEN;
+  $('ai-chat-panel').classList.toggle('open',AI_OPEN);
+  $('ai-fab-badge').style.display='none';
+  if(AI_OPEN&&!$('ai-chat-messages').children.length){
+    const isRP=profile?.partnerType!=='bp';
+    $('ai-chat-panel').querySelector('.ai-chat-name').textContent=isRP?'Asistente Referral Partner':'Asistente Business Partner';
+    setTimeout(()=>{
+      const welcome=isRP
+        ?`¡Hola! 👋 Soy tu asistente de <strong>Referral Partner</strong>.<br><br>Puedo ayudarte con comisiones, proceso de venta, herramientas y clientes de referencia.<br><br>¿En qué puedo ayudarte?`
+        :`¡Hola! 👋 Soy tu asistente de <strong>Business Partner</strong>.<br><br>Puedo ayudarte con modelos de venta, márgenes, SLA, certificaciones y oportunidades de expansión.<br><br>¿En qué puedo ayudarte?`;
+      aiAddMsg(welcome,'bot');aiSetSugg(aiGetSugg(true));
+    },300);
+  }
+}
+
+function initApp(){
+  document.querySelectorAll('.lpt-option').forEach(opt=>opt.addEventListener('click',()=>{
+    document.querySelectorAll('.lpt-option').forEach(o=>o.classList.remove('selected'));opt.classList.add('selected');loginPartnerType=opt.dataset.type;
+    const label=$('login-org-label');if(loginPartnerType==='bp'){label.textContent='Nombre de la Organización';$('login-community').placeholder='Ej: Mérida RRHH Consulting';}else{label.textContent='Tu nombre';$('login-community').placeholder='Ej: Juan García';}
+  }));
+  $('login-btn-step1').addEventListener('click',()=>{
+    const val=$('login-community').value.trim(),inp=$('login-community'),err=$('login-community-error');
+    inp.classList.remove('error');err.classList.remove('show');if(!val){inp.classList.add('error');err.classList.add('show');return;}
+    loginOrgName=val;if(loginPartnerType==='bp'){$('login-org-name-display').textContent=val;$('login-org-avatar').textContent=initials(val);goToLoginStep(2);}else{finishLogin(val,val,null);}
+  });
+  $('login-community').addEventListener('keydown',e=>{if(e.key==='Enter')$('login-btn-step1').click();});
+  $('login-btn-step2').addEventListener('click',()=>{
+    const role=$('login-user-role').value.trim(),pwd=$('login-password').value;let ok=true;
+    [$('login-user-role'),$('login-password')].forEach(el=>el.classList.remove('error'));[$('login-role-error'),$('login-pwd-error')].forEach(el=>el.classList.remove('show'));
+    if(!role){$('login-user-role').classList.add('error');$('login-role-error').textContent='Ingresá tu usuario.';$('login-role-error').classList.add('show');ok=false;}
+    if(!pwd){$('login-password').classList.add('error');$('login-pwd-error').classList.add('show');ok=false;}if(!ok)return;
+    if(pwd.length<4){$('login-password').classList.add('error');$('login-pwd-error').textContent='Mínimo 4 caracteres.';$('login-pwd-error').classList.add('show');return;}
+    finishLogin(loginOrgName,role,loginOrgName);
+  });
+  $('login-password').addEventListener('keydown',e=>{if(e.key==='Enter')$('login-btn-step2').click();});
+  $('login-back-btn').addEventListener('click',()=>goToLoginStep(1));
+  $('login-pwd-toggle').addEventListener('click',function(){const inp=$('login-password');const show=inp.type==='password';inp.type=show?'text':'password';this.textContent=show?'🙈':'👁';});
+  ['es','en','pt'].forEach(l=>$('lang-'+l).addEventListener('click',()=>setLang(l)));
+  $('acc-rp-header').addEventListener('click',()=>selectModel('rp'));
+  $('acc-bp-header').addEventListener('click',()=>selectModel('bp'));
+  $('calc-btn').addEventListener('click',()=>calcular(false));
+  $('clear-calc-btn').addEventListener('click',()=>{
+    $('industria').value='';$('empleados').value='';['err-industria','err-empleados'].forEach(id=>$(id).classList.remove('show'));
+    const res=$('oracle-results');res.classList.remove('show');setTimeout(()=>res.style.display='none',300);
+    $('summary-body').style.display='none';$('summary-chevron').classList.remove('open');$('clear-calc-btn').style.display='none';currentResult=null;
+    setStepState(2,'active');setStepState(3,profile?.contractSigned?'done':'');setStepState(4,'');
+  });
+  $('empleados').addEventListener('keydown',e=>{if(e.key==='Enter')calcular(false);});
+  $('industria').addEventListener('change',()=>{$('industria').classList.remove('error');$('err-industria').classList.remove('show');});
+  $('empleados').addEventListener('input',()=>{$('empleados').classList.remove('error');$('err-empleados').classList.remove('show');});
+  $('portfolio-toggle').addEventListener('click',togglePortfolio);$('add-client-btn').addEventListener('click',addOR);
+  $('summary-toggle').addEventListener('click',toggleSummary);$('copy-btn').addEventListener('click',copySummary);$('wa-btn').addEventListener('click',shareWhatsApp);
+  $('verify-btn').addEventListener('click',checkHubspot);$('hs-company').addEventListener('keydown',e=>{if(e.key==='Enter')checkHubspot();});
+  $('demo-btn').addEventListener('click',agendarDemo);$('back-to-verify').addEventListener('click',()=>setRegStep(1));
+  $('new-client-btn').addEventListener('click',resetRegFlow);$('copy-demo-btn').addEventListener('click',copyDemoInfo);$('sign-btn').addEventListener('click',firmarAcuerdo);
+  $('user-avatar-btn').addEventListener('click',e=>{e.stopPropagation();$('user-dropdown').classList.toggle('open');$('notif-dropdown').classList.remove('open');});
+  $('notif-bell-btn').addEventListener('click',e=>{e.stopPropagation();$('notif-dropdown').classList.toggle('open');$('user-dropdown').classList.remove('open');});
+  $('notif-mark-read').addEventListener('click',e=>{e.stopPropagation();markNotifsRead();});
+  document.addEventListener('click',()=>{$('user-dropdown').classList.remove('open');$('notif-dropdown').classList.remove('open');});
+  $('dd-logout').addEventListener('click',logout);$('dd-contract-btn').addEventListener('click',()=>window.open('https://www.pandadoc.com','_blank'));
+  $('drawer-close').addEventListener('click',closeDrawer);$('drawer-overlay').addEventListener('click',closeDrawer);
+  $('drawer-contact-btn').addEventListener('click',()=>{const c=clientsHistory.find(x=>x.id===drawerClientId);window.open('https://wa.me/?text='+encodeURIComponent(`Hola ${c?.execName||'Partner Executive'}, necesito soporte con ${c?.company||'mi cliente'}.`),'_blank');});
+  $('ai-fab-btn').addEventListener('click',toggleAIChat);
+  $('ai-chat-close').addEventListener('click',e=>{e.stopPropagation();AI_OPEN=false;$('ai-chat-panel').classList.remove('open');});
+  $('ai-send-btn').addEventListener('click',()=>aiSend());
+  $('ai-chat-input').addEventListener('keydown',e=>{if(e.key==='Enter')aiSend();});
+  profile=loadProfile();
+  if(profile){clientsHistory=loadClients();if(!clientsHistory.length){clientsHistory=makeDemoClients();saveClients();}bootApp();}
+}
+
+document.addEventListener('DOMContentLoaded',initApp);
+</script>
+</body>
+</html>
